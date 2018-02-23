@@ -1,0 +1,96 @@
+
+.head{
+    padding: 80rpx;
+    line-height: 1;
+}
+.body{
+    position: relative;
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+    overflow: hidden;
+}
+.title{
+    font-size: 52rpx;
+}
+.desc{
+    margin-top: 10rpx;
+    font-size: 28rpx;
+}
+
+.widgets__item{
+    overflow: hidden;
+   cursor: pointer;
+   
+   
+}
+.widgets__info{
+    padding:15rpx 0 0 15rpx;
+    overflow: hidden;
+    line-height: 1;
+    border-bottom: 1rpx solid gray;
+}
+.widgets__info-img{
+    width:100rpx;
+    height:100rpx;margin-right: 15rpx;
+    float:left;
+}
+
+
+.widgets__info-name{display: block;height:50rpx;padding-top:15rpx;margin-right: 15rpx;
+white-space: nowrap;overflow: hidden;text-overflow: ellipsis;font-size: 28rpx}
+.widgets__info-info{color:#aaa;font-size:22rpx;display: block;border-bottom:1rpx solid #eee;padding-bottom: 20rpx;margin-left: 115rpx}
+
+
+#user{position: relative;height:0;padding-top:55%;width:100%;background-size:cover;background-position: center center;
+background-repeat: no-repeat;background-color: #eee;border-bottom:1rpx solid #fff;}
+#usergender{width: 32rpx;height: 32rpx;margin:0 10rpx}
+#user_info{position: absolute;left:60rpx;bottom:60rpx;color: #fff;overflow: hidden}
+#user_ava{width:80rpx;height:80rpx;border-radius: 50%;border:2rpx solid #fff;vertical-align: middle;margin-right:20rpx;}
+
+.playerAction{
+  position: fixed;
+  border-top: 1rpx solid gray;
+  width: 100%;
+  bottom: 0rpx;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.playerAction .play-btn-start{
+    width: 120rpx;
+    height: 120rpx;
+    position: absolute;
+    bottom: 0rpx;
+    right: 130rpx;
+    z-index: 1111;
+    background-size: 90rpx;
+    border-radius: 15rpx;
+}
+
+.scroll_view .blank_area{
+    width:100%;
+    height:120rpx;
+}
+
+.playerAction .play-btn-allScreen{
+    width: 120rpx;
+    height: 120rpx;
+    position: absolute;
+    bottom: 0;
+    right: 20rpx;
+    z-index: 1111;
+    background-size: 90rpx;
+    border-radius: 15rpx;
+}
+.scroll_view{
+  width: 100%;
+  margin:0 auto;
+  margin-top: 5rpx;
+  margin-bottom: 2rpx;
+}
+
+::-webkit-scrollbar{
+  width:0;
+  height: 0;
+  color: transparent;
+}

@@ -1,0 +1,43 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+
+/* pages/view/view.wxss */
+.bc_green{
+  background-color: greenyellow;
+  height: 200rpx;
+  width: 200rpx;
+  
+}
+
+.bc_red{
+  background-color: red;
+  height: 200rpx;
+  width: 200rpx;
+}
+
+.bc_blue{
+  background-color: blue;
+  height: 200rpx;
+  width: 200rpx;
+}
+
+.bc_yellow{
+  background-color: yellow;
+  height: 200rpx;
+  width: 200rpx;
+
+}
+
+
+
+.flex-wrp{
+  display: flex;
+}
