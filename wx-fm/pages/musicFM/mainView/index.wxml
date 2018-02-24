@@ -1,8 +1,0 @@
-<!--pages/musicFM/mainView/index.wxml-->
-<scroll-view>
-  <block>
-    <audio poster="{{poster}}" name="{{name}}" author="{{author}}" src="{{src}}" id="myAudio" controls loop>
-    </audio>
-  </block>
-
-</scroll-view>
