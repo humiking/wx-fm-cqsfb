@@ -1,8 +1,14 @@
-var app =getApp();
+var util = require("../../utils/util.js");
+var app = getApp();
+const backgroundAudioManager = wx.getBackgroundAudioManager();
+var local = 'wxlocal.cqsfb.top';
+var online = 'cqsfb.top';
+var https = online;
 
 Page({
   data: {
     imgUrls: [],
+    playImage: "http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/playing.png",
     indicatorDots: true,
     autoplay: true,
     interval: 3000,
@@ -10,62 +16,123 @@ Page({
     playing:false,
     list: [],
     user: {},
-    currentPlayInfo:{},
+    activePercent:0,
+    currentPosition:0,
+    currentPlayInfo:{}
   },
   onLoad: function (options) {
     var that = this;
+    //改变标题
     wx.setNavigationBarTitle({
       title: '珊瑚坝电台'
-    })
 
+    })
+    //播放列表
+    var timestamp = Date.parse(new Date());
+      wx.request({
+        url: 'https://' + https + '/wx/list?time=' + timestamp,
+        method: 'GET',
+        success: function (res) {
+          if (res.data.successful) {
+            that.setData({
+              list: res.data.data.list_sf,
+              currentPlayInfo: res.data.data.list_sf[0]
+            })
+           
+            
+            var appData = app.globalData;
+            appData.currentPlayInfo = res.data.data.list_sf[0];
+            appData.list_sf = res.data.data.list_sf;
+            appData.curplay = appData.currentPlayInfo.urlList[0].mp3Url;
+            appData.index_am = appData.list_sf.length;
+            appData.currentTotalDuration = appData.currentPlayInfo.totalDuration
+            appData.currentDuration = appData.currentPlayInfo.urlList[0].duration
+          }
+        }
+      })
+    
+    //获取请求轮播图
     wx.request({
-      url: 'https://wxlocal.cqsfb.top/wx/banner',
-      success:function(res){
-        if(res.data.successful){
+      url: 'https://' + https + '/wx/banner',
+      success: function (res) {
+        if (res.data.successful) {
           that.setData({
             imgUrls: res.data.data
           })
-        } 
+        }
       }
     })
 
-    var timestamp = Date.parse(new Date());
-    wx.request({
-      url: 'https://wxlocal.cqsfb.top/wx/list?time=' + timestamp,
-      method: 'GET',
-      success: function (res) {
-        if(res.data.successful){
-          app.globalData.list_sf = res.data.data.list_sf;
-          that.setData({
-            list:res.data.data.list_sf,
-            currentPlayInfo: res.data.data.list_sf[0]
-          })
-        }
-        app.globalData.curplay = that.data.currentPlayInfo.urlList[0].mp3Url;
-        console.log(app.globalData.curplay);
-      }
-    })
   },
-  isplay:function(){
+  isplay:function(e){
+    //获取后台播放管理器
+    
+    //更新进度条
+    backgroundAudioManager.onTimeUpdate(function (callback) {
+      var duration = backgroundAudioManager.duration;
+      var currentTime = backgroundAudioManager.currentTime;
+      var percent = util.formPercent(currentTime, duration);
+      that.setData({
+        activePercent: percent
+      })
+    })
+    //设置暂停监听器
+    backgroundAudioManager.onPause(function (callback) {
+      that.setData({
+        currentPosition: backgroundAudioManager.currentTime,
+      })
+    })
+    //设置自然结束监听器
+    backgroundAudioManager.onEnded(function (callback) {
+      that.setData({
+        currentPosition: backgroundAudioManager.currentTime,
+        playImage: "http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/playing.png",
+        activePercent:0
+      })
+    })
+    //设置手动结束监听器
+    backgroundAudioManager.onStop(function (callback) {
+
+
+    })
+    //改变播放的按钮以及状态
     var that = this;
     that.setData({
       playing:that.data.playing?false:true
-    })
+    });
+    app.globalData.playing = that.data.playing;
+    var kind = e.currentTarget.id;
+
     if(that.data.playing){
-      wx.playBackgroundAudio({
-        dataUrl: app.globalData.curplay
-      })
+      that.setData({    playImage:"http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/pause.png"
+      });
+      if (!that.data.currentPosition){
+        var url = app.globalData.currentPlayInfo.urlList;
+        wx.playBackgroundAudio({
+          dataUrl: url[0].mp3Url
+        })
+      }else{
+        wx.seekBackgroundAudio({
+          position: that.data.currentPosition
+        })
+        backgroundAudioManager.play();
+        
+      }
     }else{
-      wx.stopBackgroundAudio();
+      that.setData({    playImage:"http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/playing.png",
+      })
+      wx.pauseBackgroundAudio();
     }
-
-
   },
+  //切换页面
   changeAllScreen:function(){
     var that=this;
+
     wx.navigateTo({
-      url: '../test1/index?playing='+that.data.playing,
+      url: '../test1/index?currentPostion=' + backgroundAudioManager.currentTime,
     })
 
-  }
+  },
+  
 });
+

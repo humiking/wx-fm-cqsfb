@@ -1,3 +1,6 @@
+var local = 'wxlocal.cqsfb.top';
+var online = 'cqsfb.top';
+var https = online;
 //app.js
 App({
   globalData: {
@@ -9,13 +12,14 @@ App({
     curplay: {}, //添加播放的url
     shuffle: 1, //播放模式shuffle，1顺序，2单曲，3随机
     globalStop: true,
-    playing:false,
-    currentPosition: 0
+    playing: false,
+    currentPosition: 0,//当前播放位置
+    currentPlayInfo:{},//当前播放电台歌曲信息
+    currentTotalDuration:0,//当前电台的总时长
+    currentDuration:0//该部分的播放时长
   },
 
   onLaunch: function () {
-    
-    
 
   },
   /**
@@ -45,7 +49,7 @@ App({
     this.globalData.globalStop = true;
     wx.stopBackgroundAudio();
   },
-  
+
   /**
    * OK,获取电台
    */
@@ -72,7 +76,7 @@ App({
     wx.getBackgroundAudioPlayerState({
       complete: function (res) {
         that.globalData.currentPosition = res.currentPosition || '0',
-        that.globalData.playing =false
+          that.globalData.playing = false
       }
     })
   },

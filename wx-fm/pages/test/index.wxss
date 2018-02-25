@@ -8,10 +8,6 @@
     padding-left: 20rpx;
     padding-right: 20rpx;
     overflow: hidden;
-    background: gray;
-}
-.test .index .swiper{
-  background-color: white;
 }
 .title{
     font-size: 52rpx;
@@ -57,42 +53,39 @@ background-repeat: no-repeat;background-color: #eee;border-bottom:1rpx solid #ff
   width: 100%;
   bottom: 0rpx;
   overflow-y: auto;
-  background-color: gold;
+  background-color: #ffffff;
 }
-.playerBox{
-  position: relative;
-}
+
 .playerAction .play-btn-start{
-    width: 90rpx;
-    height: 90rpx;
+    width: 120rpx;
+    height: 120rpx;
     position: absolute;
-    bottom: 10rpx;
-    right: 150rpx;
+    bottom: 0rpx;
+    right: 130rpx;
     z-index: 1111;
-    background: url(https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3810629990,1792768242&fm=200&gp=0.jpg);
     background-size: 90rpx;
+    border-radius: 15rpx;
 }
 
 .scroll_view .blank_area{
     width:100%;
     height:120rpx;
-   
 }
 
 .playerAction .play-btn-allScreen{
-    width: 90rpx;
-    height: 90rpx;
+    width: 120rpx;
+    height: 120rpx;
     position: absolute;
-    bottom: 10rpx;
-    right: 30rpx;
+    bottom: 0;
+    right: 20rpx;
     z-index: 1111;
-    background: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515506271800&di=de1db3e7aea4527eea8fb23740352bf6&imgtype=0&src=http%3A%2F%2Fthumb105.test-ss.cn%2Fz%2Fstock-photo-253775353.jpg);
     background-size: 90rpx;
+    border-radius: 15rpx;
 }
 .scroll_view{
   width: 100%;
   margin:0 auto;
-  margin-top: 25rpx;
+  margin-top: 5rpx;
   margin-bottom: 2rpx;
 }
 

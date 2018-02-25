@@ -189,11 +189,19 @@ function loadlrc(that) {
     })
   }
 }
+function formPercent(currentTime, duration){
+  var percent = (currentTime / duration).toFixed(2);
+  var result = Math.round(percent*100);
+  return result; 
+
+
+}
 module.exports = {
   formatTime: formatTime,//格式化时间
   formatduration: formatduration,//格式化时长
   parse_lrc: parse_lrc,//解析歌词
   playAlrc: playAlrc,//播放所有推荐
   loadlrc: loadlrc,//加载歌词
-  loadrec: loadrec//加载推荐
+  loadrec: loadrec,//加载推荐
+  formPercent: formPercent//生成百分比
 }
