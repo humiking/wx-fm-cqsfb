@@ -40,6 +40,7 @@ public class WxController extends BaseController{
 	public JsonResponse home(@RequestParam(value = "numbersOfBanners", required = false, defaultValue = "3") int numbersOfBanners) {
 		JsonResponse jsonResponse = new JsonResponse();
 		try {
+			logger.info("调用banner");
 			List<String> data=wxServiceImpl.getBanners(numbersOfBanners);
 			return jsonResponse.setSuccessful().setData(data);
 		} catch (Exception e) {
@@ -56,6 +57,7 @@ public class WxController extends BaseController{
 			                 @RequestParam(value = "size",required = false,defaultValue = "10") int size){
 		JsonResponse jsonResponse = new JsonResponse();
 		try {
+			logger.info("调用list");
 			Page<WxFmList> page = new Page<WxFmList>(current, size);
 			Map<String,Object> data = wxFmListService.list(userId,page);
 			return jsonResponse.setSuccessful().setData(data);
@@ -65,4 +67,5 @@ public class WxController extends BaseController{
 		}
 	}
 
+	
 }
