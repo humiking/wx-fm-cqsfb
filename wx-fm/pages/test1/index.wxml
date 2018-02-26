@@ -2,7 +2,7 @@
 <view id="playingpage" class="{{playing?'playing':''}}">
   <view id="playing-bg" class="blurbg" style="background-image:url({{music.album.picUrl}})"></view>
   <view id="playing-zz" hidden="{{showlrc}}">
-    <image src="../../../image/aag.png" />
+    <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/aag.png" />
   </view>
   <view id="playing-main" hidden="{{showlrc}}">
     <image id="playingmainbg" src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/heijiao.png" />
@@ -34,28 +34,28 @@
     <template is="playingpercent" data="{{playtime:playtime,percent:percent,duration:duration}}" />
     <view id="playingaction">
       <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=1}}">
-        <image src="../../../image/a_p.png" />
+        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_p.png" />
       </view>
       <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=2}}">
-        <image src="../../../image/a_y.png" />
+        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_y.png" />
       </view>
       <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=3}}">
-        <image src="../../../image/aa9.png" />
+        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/aa9.png" />
       </view>
       <view class="pa-maction" data-other="-1" bindtap="playother">
-        <image src="../../../image/ajh.png" />
+        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajh.png" />
       </view>
       <view class="pa-baction" hidden="{{!playing}}" bindtap="playingtoggle" data-p="{{playing}}">
-        <image id='pa-playing' src="../../../image/ajd.png" />
+        <image id='pa-playing' src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajd.png" />
       </view>
       <view class="pa-baction" hidden="{{playing}}" bindtap="playingtoggle" data-p="{{playing}}">
-        <image id='pa-pause' src="../../../image/ajf.png" />
+        <image id='pa-pause' src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajf.png" />
       </view>
       <view class="pa-maction" data-other="1" bindtap="playother">
-        <image src="../../../image/ajb.png" />
+        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajb.png" />
       </view>
-      <view class="pa-saction" bindtap="musicinfo">
-        <image src="../../../image/aad.png" />
+      <view class="pa-saction" bindtap="allscreen">
+        <image src="../../image/player-allscreen.png" />
       </view>
     </view>
   </view>

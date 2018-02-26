@@ -1,5 +1,5 @@
 var util = require("../../utils/util.js");
-var app = getApp();
+const app = getApp();
 const backgroundAudioManager = wx.getBackgroundAudioManager();
 var local = 'wxlocal.cqsfb.top';
 var online = 'cqsfb.top';
@@ -18,13 +18,15 @@ Page({
     user: {},
     activePercent:0,
     currentPosition:0,
-    currentPlayInfo:{}
+    currentPlayInfo:{},
+    currentPlayUrl:{}
   },
   onLoad: function (options) {
     var that = this;
     //改变标题
     wx.setNavigationBarTitle({
       title: '珊瑚坝电台'
+
     })
     //播放列表
     var timestamp = Date.parse(new Date());
@@ -35,9 +37,9 @@ Page({
           if (res.data.successful) {
             that.setData({
               list: res.data.data.list_sf,
-              currentPlayInfo: res.data.data.list_sf[0]
+              currentPlayInfo: res.data.data.list_sf[0],
+              currentPlayUrl: res.data.data.list_sf[0].urlList[0].mp3Url
             })
-           
             
             var appData = app.globalData;
             appData.currentPlayInfo = res.data.data.list_sf[0];
@@ -61,6 +63,24 @@ Page({
         }
       }
     })
+
+  },
+  onShow:function(){
+    var that = this;
+    if (app.globalData.list_sf.length > 0){
+      var list = app.globalData.list_sf;
+      console.log(list);
+      var currentPlayInfo = app.globalData.list_sf[0];
+      var urlList = currentPlayInfo.urlList[0];
+      that.setData({
+        list: app.globalData.list_sf,
+        currentPlayInfo: app.globalData.list_sf[0],
+        currentPlayUrl: urlList.mp3Url,
+        playing: app.globalData.playing
+      })
+
+    }
+    
 
   },
   isplay:function(e){
@@ -98,10 +118,8 @@ Page({
     var that = this;
     that.setData({
       playing:that.data.playing?false:true
-    })
     });
     app.globalData.playing = that.data.playing;
-    
     var kind = e.currentTarget.id;
 
     if(that.data.playing){
@@ -109,6 +127,7 @@ Page({
       });
       if (!that.data.currentPosition){
         var url = app.globalData.currentPlayInfo.urlList;
+        console.log(url[0].mp3Url);
         wx.playBackgroundAudio({
           dataUrl: url[0].mp3Url
         })
@@ -122,8 +141,7 @@ Page({
     }else{
       that.setData({    playImage:"http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/playing.png",
       })
-    }else{
-      wx.stopBackgroundAudio();
+      wx.pauseBackgroundAudio();
     }
   },
   //切换页面
@@ -134,5 +152,7 @@ Page({
       url: '../test1/index?currentPostion=' + backgroundAudioManager.currentTime,
     })
 
-  }
+  },
+  
 });
+

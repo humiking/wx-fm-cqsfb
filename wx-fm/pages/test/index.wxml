@@ -28,8 +28,8 @@
                 <text class="widgets__info-name">{{currentPlayInfo.name}}</text>
                 <!-- <text class="widgets__info-info">{{item.trackCount}}首，播放{{item.playCount}}次</text> -->
             </view>
-            <button class="play-btn-start" bindtap="isplay"></button>
-            <button class="play-btn-allScreen" bindtap="changeAllScreen"></button>
+            <image class="play-btn-start" id="btn-start" mode="aspectFit" src="{{playImage}}" bindtap="isplay"></image>
+            <image class="play-btn-allScreen" mode="" src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/allscreen.png" bindtap="changeAllScreen"></image>
         </view>
     </view>
 </view>
