@@ -8,7 +8,10 @@ Page({
   data: {
     playing:false,
     currentPosition:0,
-    currentPlayInfo:{}
+    currentPlayInfo:{},
+    activePercent: 0,
+    currentPosition: 0,
+    currentPlayUrl: {}
   
   },
   onLoad: function (options){
@@ -23,6 +26,10 @@ Page({
     wx.setNavigationBarTitle({
       title: that.data.currentPlayInfo.name
     })
+
+  },
+  onShow:function(){
+    //获取当前播放的状态以及当前歌曲信息
 
   },
 

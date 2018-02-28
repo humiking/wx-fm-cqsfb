@@ -14,7 +14,7 @@ Page({
     interval: 3000,
     duration: 1000,
     playing:false,
-    list: [],
+    list_sf: [],
     user: {},
     activePercent:0,
     currentPosition:0,
@@ -36,7 +36,7 @@ Page({
         success: function (res) {
           if (res.data.successful) {
             that.setData({
-              list: res.data.data.list_sf,
+              list_sf: res.data.data.list_sf,
               currentPlayInfo: res.data.data.list_sf[0],
               currentPlayUrl: res.data.data.list_sf[0].urlList[0].mp3Url
             })
@@ -68,12 +68,10 @@ Page({
   onShow:function(){
     var that = this;
     if (app.globalData.list_sf.length > 0){
-      var list = app.globalData.list_sf;
-      console.log(list);
       var currentPlayInfo = app.globalData.list_sf[0];
       var urlList = currentPlayInfo.urlList[0];
       that.setData({
-        list: app.globalData.list_sf,
+        list_sf: app.globalData.list_sf,
         currentPlayInfo: app.globalData.list_sf[0],
         currentPlayUrl: urlList.mp3Url,
         playing: app.globalData.playing
@@ -83,7 +81,7 @@ Page({
     
 
   },
-  isplay:function(e){
+  isplay:function(){
     //获取后台播放管理器
     
     //更新进度条
@@ -99,6 +97,7 @@ Page({
     backgroundAudioManager.onPause(function (callback) {
       that.setData({
         currentPosition: backgroundAudioManager.currentTime,
+        playImage: "http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/playing.png",
       })
     })
     //设置自然结束监听器
@@ -106,28 +105,43 @@ Page({
       that.setData({
         currentPosition: backgroundAudioManager.currentTime,
         playImage: "http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/playing.png",
-        activePercent:0
+        activePercent:0,
+        currentPosition:0
       })
     })
     //设置手动结束监听器
     backgroundAudioManager.onStop(function (callback) {
+      that.setData({
+        currentPosition: backgroundAudioManager.currentTime,
+        activePercent: 0,
+        currentPosition:0
+      })
 
 
     })
+    //后台播放等候
+    backgroundAudioManager.onWaiting(function (callback){
+      wx.showToast({
+        title: '正在加载',
+        icon:"loading"
+      })
+      
+    })
+    
+    
     //改变播放的按钮以及状态
     var that = this;
     that.setData({
       playing:that.data.playing?false:true
     });
     app.globalData.playing = that.data.playing;
-    var kind = e.currentTarget.id;
 
     if(that.data.playing){
-      that.setData({    playImage:"http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/pause.png"
+      that.setData({    
+        playImage:"http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/pause.png"
       });
       if (!that.data.currentPosition){
-        var url = app.globalData.currentPlayInfo.urlList;
-        console.log(url[0].mp3Url);
+        var url = that.data.currentPlayInfo.urlList;
         wx.playBackgroundAudio({
           dataUrl: url[0].mp3Url
         })
@@ -152,7 +166,39 @@ Page({
       url: '../test1/index?currentPostion=' + backgroundAudioManager.currentTime,
     })
 
+
   },
+  //点击列表内的歌曲进行换歌
+  playThisMusic:function(event){
+    //先进行判断是否在播放的歌曲是改歌曲
+    var currentTarget = event.currentTarget;
+    var id = currentTarget.dataset.id;
+    var that = this;
+    var data = that.data;
+    if (data.currentPlayInfo.id==id){
+      that.isplay();
+    }else{
+      for (var i in data.list_sf){
+        if (data.list_sf[i].id == id){
+          that.setData({
+            currentPlayInfo: data.list_sf[i]
+          })
+          app.globalData.currentPlayInfo = data.list_sf[i];
+        }
+      }
+      
+      //重新播放
+      backgroundAudioManager.stop();
+      that.setData({
+        playing:false,
+        currentPosition: 0,
+        activePercent: 0
+      })
+      that.isplay();
+      console.log(that.data);
+    }
+
+  }
   
 });
 

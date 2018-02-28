@@ -13,6 +13,7 @@ App({
     shuffle: 1, //播放模式shuffle，1顺序，2单曲，3随机
     globalStop: true,
     playing: false,
+    activePercent:0,
     currentPosition: 0,//当前播放位置
     currentPlayInfo:{},//当前播放电台歌曲信息
     currentTotalDuration:0,//当前电台的总时长
