@@ -146,7 +146,8 @@ Page({
     backgroundAudioManager.onWaiting(function (callback) {
       wx.showToast({
         title: '正在加载',
-        icon: "loading"
+        icon: "loading",
+        duration:500
       })
     })
     

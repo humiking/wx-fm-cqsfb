@@ -1,5 +1,6 @@
 var hostInfo = require("host.js");
 var https = hostInfo.online;
+var backgroundAudioManager = wx.getBackgroundAudioManager();
 //app.js
 App({
   globalData: {
@@ -23,6 +24,7 @@ App({
   },
 
   onLaunch: function () {
+    
 
   },
   /**
