@@ -1,62 +1,62 @@
 <import src="../../utils/playpercent.wxml" />
 <view id="playingpage" class="{{playing?'playing':''}}">
-  <view id="playing-bg" class="blurbg" style="background-image:url({{music.album.picUrl}})"></view>
-  <view id="playing-zz" hidden="{{showlrc}}">
-    <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/aag.png" />
-  </view>
-  <view id="playing-main" hidden="{{showlrc}}">
-    <image id="playingmainbg" src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/heijiao.png" />
-    <image src="{{currentPlayInfo.poster}}" bindtap="loadlrc" id="pmaincover" />
-  </view>
-  <view id="playing-actwrap">
-    <view id="playing-info" wx:if="{{!showlrc}}">
-    <!--获取关注  -->
-      <!-- <view class="pi-act">
+    <view id="playing-bg" class="blurbg" style="background-image:url({{music.album.picUrl}})"></view>
+    <view id="playing-zz" hidden="{{showlrc}}">
+        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/aag.png" />
+    </view>
+    <view id="playing-main" hidden="{{showlrc}}">
+        <image id="playingmainbg" src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/heijiao.png" />
+        <image src="{{currentPlayInfo.poster}}" bindtap="loadlrc" id="pmaincover" />
+    </view>
+    <view id="playing-actwrap">
+        <view id="playing-info" wx:if="{{!showlrc}}">
+            <!--获取关注  -->
+            <!-- <view class="pi-act">
         <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_r.png" />
       </view> -->
-      <!--获取下载按钮  -->
-      <!-- <view class="pi-act" bindtap="downmusic">
+            <!--获取下载按钮  -->
+            <!-- <view class="pi-act" bindtap="downmusic">
         <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_i.png" />
       </view> -->
-      <!--热评按钮  -->
-      <!-- <view class="pi-act commentscount">
+            <!--热评按钮  -->
+            <!-- <view class="pi-act commentscount">
          <navigator url="../recommend/index?id={{music.commentThreadId}}&from=song">
           <image wx:if="{{!commentscount}}" src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_e.png" />
           <image wx:if="{{commentscount}}" src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_f.png" />
           <text wx:if="{{commentscount}}">{{commentscount>999?'999+':(commentscount>99?'99+':commentscount)}}</text>
         </navigator> 
       </view> -->
-      <!--获取选项按钮  -->
-      <!-- <view class="pi-act">
+            <!--获取选项按钮  -->
+            <!-- <view class="pi-act">
         <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_x.png" />
       </view> -->
+        </view>
+        <template is="playingpercent" data="{{currentPlayTime:currentPlayTime,activePercent:activePercent,currentDurationTime:currentDurationTime}}" />
+        <view id="playingaction">
+            <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=1}}">
+                <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_p.png" />
+            </view>
+            <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=2}}">
+                <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_y.png" />
+            </view>
+            <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=3}}">
+                <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/aa9.png" />
+            </view>
+            <view class="pa-maction" data-other="-1" bindtap="playother">
+                <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajh.png" />
+            </view>
+            <view class="pa-baction" hidden="{{!playing}}" bindtap="playingtoggle" data-p="{{playing}}">
+                <image id='pa-playing' src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajd.png" />
+            </view>
+            <view class="pa-baction" hidden="{{playing}}" bindtap="playingtoggle" data-p="{{playing}}">
+                <image id='pa-pause' src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajf.png" />
+            </view>
+            <view class="pa-maction" data-other="1" bindtap="playother">
+                <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajb.png" />
+            </view>
+            <view class="pa-saction" bindtap="allscreen">
+                <image src="../../image/player-allscreen.png" />
+            </view>
+        </view>
     </view>
-    <template is="playingpercent" data="{{playtime:playtime,percent:percent,duration:duration}}" />
-    <view id="playingaction">
-      <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=1}}">
-        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_p.png" />
-      </view>
-      <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=2}}">
-        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/a_y.png" />
-      </view>
-      <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=3}}">
-        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/aa9.png" />
-      </view>
-      <view class="pa-maction" data-other="-1" bindtap="playother">
-        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajh.png" />
-      </view>
-      <view class="pa-baction" hidden="{{!playing}}" bindtap="playingtoggle" data-p="{{playing}}">
-        <image id='pa-playing' src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajd.png" />
-      </view>
-      <view class="pa-baction" hidden="{{playing}}" bindtap="playingtoggle" data-p="{{playing}}">
-        <image id='pa-pause' src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajf.png" />
-      </view>
-      <view class="pa-maction" data-other="1" bindtap="playother">
-        <image src="http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/ajb.png" />
-      </view>
-      <view class="pa-saction" bindtap="allscreen">
-        <image src="../../image/player-allscreen.png" />
-      </view>
-    </view>
-  </view>
 </view>

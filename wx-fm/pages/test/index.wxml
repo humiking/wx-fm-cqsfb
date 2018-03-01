@@ -20,6 +20,10 @@
                 </view>
             </view>
         </block>
+        <view class="blank_area">
+                        
+        </view>
+
     </scroll-view>
     <!--播放按钮-->
     <view class="playerBox">

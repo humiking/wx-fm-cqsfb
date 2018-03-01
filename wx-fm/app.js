@@ -1,23 +1,25 @@
-var local = 'wxlocal.cqsfb.top';
-var online = 'cqsfb.top';
-var https = online;
+var hostInfo = require("host.js");
+var https = hostInfo.online;
 //app.js
 App({
   globalData: {
     hasLogin: true,
     list_am: [], //播放列表，已经经历过播放模式排序后的
-    list_sf: [], //播放列表
     index_am: 0,
     playtype: 1, //播放类型：1.播放列表播放 
     curplay: {}, //添加播放的url
     shuffle: 1, //播放模式shuffle，1顺序，2单曲，3随机
-    globalStop: true,
+    //播放参数
     playing: false,
-    activePercent:0,
+    list_sf: [], //播放列表
+    activePercent:0,//进度条播放百分比
     currentPosition: 0,//当前播放位置
-    currentPlayInfo:{},//当前播放电台歌曲信息
     currentTotalDuration:0,//当前电台的总时长
-    currentDuration:0//该部分的播放时长
+    currentDuration:0,//该部分的播放时长
+    currentPlayInfo:{},//当前播放电台歌曲信息
+    currentPlayUrl: {},//当前播放的url
+    index: 0//索引
+   
   },
 
   onLaunch: function () {
@@ -47,7 +49,7 @@ App({
    */
   preplay: function () {
     //歌曲切换 停止当前音乐
-    this.globalData.globalStop = true;
+    this.globalData.playing = false;
     wx.stopBackgroundAudio();
   },
 
@@ -106,7 +108,7 @@ App({
         if (seek != undefined) {
           wx.seekBackgroundAudio({ position: seek })
         };
-        that.globalData.globalStop = false;
+        that.globalData.playing = true;
         cb && cb();
       },
       fail: function () {

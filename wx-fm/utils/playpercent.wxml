@@ -1,9 +1,9 @@
 <template name="playingpercent">
   <view id="playing-status">
-    <text class="time">{{playtime}}</text>
-    <progress percent="{{percent}}" color="#d33a31" stroke-width="2">
-      <text style="left:{{percent}}%"></text>
+    <text class="time">{{currentPlayTime1}}</text>
+    <progress percent="{{activePercent1}}" color="#d33a31" stroke-width="2">
+      <text style="left:{{activePercent1}}%"></text>
     </progress>
-    <text id="endtime" class="time">{{duration}}</text>
+    <text id="endtime" class="time">{{currentDurationTime1}}</text>
   </view>
 </template>

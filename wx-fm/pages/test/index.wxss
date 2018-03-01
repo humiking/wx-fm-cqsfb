@@ -86,7 +86,7 @@ background-repeat: no-repeat;background-color: #eee;border-bottom:1rpx solid #ff
 
 .scroll_view .blank_area{
     width:100%;
-    height:120rpx;
+    height:140rpx;
 }
 
 .playerAction .play-btn-allScreen{
