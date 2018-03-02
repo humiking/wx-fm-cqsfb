@@ -1,6 +1,9 @@
 <view class="index">
     <!--轮播图  -->
-    <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" class="text index swiper">
+    <loading hidden="{{hidden_loading}}" bindchange="loadingChange">
+    加载中...
+  </loading>  
+    <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" class="text index swiper" id="swiper">
         <block wx:for="{{imgUrls}}">
             <swiper-item class="swiper-item">
                 <image src="{{item}}" class="slide-image" width="100%" />
@@ -8,7 +11,10 @@
         </block>
     </swiper>
     <!--歌曲列表  -->
-    <scroll-view class="scroll_view" scroll-top="false">
+    <view class="container_scroll_view" style='margin-top:{{banner_height}}px;' >
+    <scroll-view class="scroll_view" scroll-top="false" >
+        
+        <view hidden='{{hidden_top_icon}}' class='loading_icon'>正在刷新...</view>
         <block wx:for="{{list_sf}}" wx:for-index="idx" wx:for-item="item">
             <view class="playlist">
                 <view class="widgets__item" bindtap='playThisMusic' data-id='{{item.id}}'>
@@ -21,14 +27,14 @@
             </view>
         </block>
         <view class="blank_area">
-                        
         </view>
-
+           <view hidden='{{hidden_bottom_icon}}' class='loading_icon'>正在刷新...</view>
     </scroll-view>
+    </view>    
     <!--播放按钮-->
     <view class="playerBox">
         <view class="playerAction">
-            <progress id='active' percent="{{activePercent}}" active stroke-width='4' active-mode="forwards" />
+            <progress id='active' percent="{{activePercent}}" active stroke-width='3' active-mode="forwards" />
             <view id="{{currentPlayInfo.id}}" class="widgets__info">
                 <image class="widgets__info-img music_cover" src="{{currentPlayInfo.poster}}" mode="aspectFill" />
                 <text class="widgets__info-name">{{currentPlayInfo.name}}</text>

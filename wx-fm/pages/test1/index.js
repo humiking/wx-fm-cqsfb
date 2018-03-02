@@ -1,6 +1,6 @@
 var app = getApp();
 var util = require("../../utils/util.js");
-var backgroundAudioManager = wx.getBackgroundAudioManager();
+
 // pages/test1/index.js
 Page({
 
@@ -47,7 +47,6 @@ Page({
       title: that.data.currentPlayInfo.name
     })
     
-    
 
   },
   onShow:function(){
@@ -67,8 +66,9 @@ Page({
         index: data.index,
         currentDurationTime: util.formatduration(data.currentTotalDuration),
         currentPlayTime: util.formatduration(data.currentPosition)
-      })
 
+      })
+      
 
     }
 
@@ -78,21 +78,20 @@ Page({
 
   playingtoggle:function(){
     var that = this;
-
-    backgroundAudioManager.onTimeUpdate(function (callback){
-      console.log(1);
-
-    })
+    var backgroundAudioManager = wx.getBackgroundAudioManager();
     backgroundAudioManager.onEnded(function (callback) {
       that.setData({
         playing: false
       })
+
     })
 
+    
     backgroundAudioManager.onStop(function (callback) {
       that.setData({
         playing: false
       })
+
 
     })
     backgroundAudioManager.onPause(function(callback){
@@ -148,33 +147,7 @@ Page({
 
   },
   playother:function(event){
-    var that = this;
-    var offset = Number.parseInt(event.currentTarget.dataset.other);
-    var index = Number.parseInt(that.data.index);
-    index += offset;
-    if(index < 0){
-      index = that.data.list_sf.length;
-    } 
-    if(index >= that.data.list_sf.length){
-      index = 0;
-    }
-    var currentPlayInfo = that.data.list_sf[index];
-    that.setData({
-      playing: false,
-      activePercent: 0,//进度条播放百分比
-      currentPosition: 0,//当前播放时间
-      // currentTotalDuration: currentPlayInfo.,//当前电台的总时长
-      // currentDuration: 0,//该部分的播放时长
-      currentPlayInfo: currentPlayInfo,//当前播放电台的信息
-      // currentPlayUrl: {},//当前播放的url
-      index: index,//索引
-
-    })
-    wx.setNavigationBarTitle({
-      title: that.data.currentPlayInfo.name,
-    })
-    that.playingtoggle();
-    
+    // var offset = event.getc 
 
   }
 })

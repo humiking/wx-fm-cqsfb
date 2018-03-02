@@ -16,6 +16,12 @@
     margin-top: 10rpx;
     font-size: 28rpx;
 }
+.swiper{
+  position: fixed;
+  width: 100%;
+  top:0rpx;
+  z-index: 99;
+}
 
 .widgets__item{
     overflow: hidden;
@@ -70,7 +76,7 @@ background-repeat: no-repeat;background-color: #eee;border-bottom:1rpx solid #ff
   width: 100%;
   bottom: 0rpx;
   overflow-y: auto;
-  background-color: #ffffff;
+  background-color: rgba(150, 150, 150, 0.9);
 }
 
 .playerAction .play-btn-start{
@@ -102,12 +108,28 @@ background-repeat: no-repeat;background-color: #eee;border-bottom:1rpx solid #ff
 .scroll_view{
   width: 100%;
   margin:0 auto;
-  margin-top: 5rpx;
+  height:100%;
   margin-bottom: 2rpx;
+  z-index: 0;
+  background-color: rgba(171, 171, 171);
+}
+
+.container_scroll_view{
+  height:100%;
+  overflow-y: auto;
+  background-color: rgba(171, 171, 171);
+  width: 100%;
 }
 
 ::-webkit-scrollbar{
   width:0;
   height: 0;
   color: transparent;
+}
+
+.container_scroll_view .loading_icon{
+  text-align: center;
+  font-size: 14px;
+  color:#aaa;
+
 }
