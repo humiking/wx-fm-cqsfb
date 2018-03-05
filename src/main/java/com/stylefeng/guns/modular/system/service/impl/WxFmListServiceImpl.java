@@ -72,6 +72,12 @@ public class WxFmListServiceImpl implements IWxFmListService{
 		List<Map<String,Object>> list = wxFmListMapper.selectMapsPage(page, wrapper);
 		return list;
 	}
+
+	@Override
+	public List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

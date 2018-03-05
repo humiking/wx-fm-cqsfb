@@ -12,4 +12,6 @@ public interface IWxFmListService {
 	
 	List<Map<String,Object>> getFmListByUserId(int userId, Page<WxFmList> page);
 
+	List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName);
+
 }
