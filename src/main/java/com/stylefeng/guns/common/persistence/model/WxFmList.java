@@ -58,6 +58,16 @@ public class WxFmList extends Model<WxFmList> {
      * 状态:0:正常 -1:删除
      */
 	private Integer status;
+	/**
+	 * 发布状态：0：未发布 5：已发布 10：已下架
+	 */
+	@TableField("publish_status")
+	private Integer publishStatus;
+	/**
+	 * 收藏状态：0:未收藏 1:已收藏
+	 */
+	@TableField("focus_status")
+	private Integer focusStatus;
 
 	public Long getId() {
 		return id;
@@ -128,6 +138,22 @@ public class WxFmList extends Model<WxFmList> {
 		this.status = status;
 	}
 
+	public Integer getPublishStatus() {
+		return publishStatus;
+	}
+
+	public void setPublishStatus(Integer publishStatus) {
+		this.publishStatus = publishStatus;
+	}
+
+	public Integer getFocusStatus() {
+		return focusStatus;
+	}
+
+	public void setFocusStatus(Integer focusStatus) {
+		this.focusStatus = focusStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "WxFmList{" +
@@ -139,6 +165,8 @@ public class WxFmList extends Model<WxFmList> {
 			", artistorName=" + artistorName +
 			", totalDuration=" + totalDuration +
 			", status=" + status +
+			", publishStatus=" + publishStatus +
+			", focusStatus=" + focusStatus +
 			"}";
 	}
 }

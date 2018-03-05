@@ -1,3 +1,8 @@
+#==========1.1wx-fm-cqsfb 20180305===============================
+ALTER TABLE wx_fm_list ADD `publish_status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '发布状态：0：未发布  5：已发布   10：已下架';
+ALTER TABLE wx_fm_list ADD `focus_status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '收藏状态：0:未收藏 1:已收藏';
+
+
 #==========1.1wx-fm-cqsfb 20180224===============================
 DROP TABLE IF EXISTS `wx_mp3url_list`;
 

@@ -75,8 +75,13 @@ public class WxFmListServiceImpl implements IWxFmListService{
 
 	@Override
 	public List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName) {
-		// TODO Auto-generated method stub
-		return null;
+		//获取所有的播放音乐列表
+		Wrapper<WxFmList> wrapper = new EntityWrapper<WxFmList>();
+		if(!fmName.equals("")) {
+			wrapper.like("NAME", fmName);
+		}
+		List<Map<String,Object>> list = wxFmListMapper.selectMapsPage(page, wrapper);
+		return list;
 	}
 	
 	
