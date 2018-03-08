@@ -12,10 +12,19 @@ var Fm_upload = {
  * 初始化表格的列
  */
 Fm_upload.initColumn = function () {
-    return [
+	var columns = 
+     [
         {field: 'selectItem', radio: true},
-        {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'}
+        {title: 'id', field: 'id', visible: true, align: 'center', valign: 'middle'},
+        {title: '歌曲名称', field: 'name', visible: true, align: 'center', valign: 'middle', sortable: true},
+        {title: '歌曲演唱者', field: 'artistorName', visible: true, align: 'center', valign: 'middle', sortable: true},
+        {title: '游客ID', field: 'userId', visible: true, align: 'center', valign: 'middle', sortable: true},
+        {title: '海报', field: 'poster', visible: true, align: 'center', valign: 'middle', sortable: true},
+        {title: '发布状态', field: 'publishStatus', visible: true, align: 'center', valign: 'middle', sortable: true},
+        {title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle', sortable: true}
+
     ];
+	return columns;
 };
 
 /**
