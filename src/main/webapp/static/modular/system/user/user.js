@@ -187,7 +187,6 @@ MgrUser.search = function () {
     queryData['name'] = $("#name").val();
     queryData['beginTime'] = $("#beginTime").val();
     queryData['endTime'] = $("#endTime").val();
-
     MgrUser.table.refresh({query: queryData});
 }
 
