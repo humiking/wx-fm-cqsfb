@@ -72,7 +72,8 @@ $(function () {
 });
 
 function init() {
-
+    
+    
     var BootstrapTable = $.fn.bootstrapTable.Constructor;
     BootstrapTable.prototype.onSort = function (event) {
         var $this = event.type === "keypress" ? $(event.currentTarget) : $(event.currentTarget).parent(),

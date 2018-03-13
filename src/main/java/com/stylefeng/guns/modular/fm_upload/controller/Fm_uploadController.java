@@ -49,6 +49,7 @@ public class Fm_uploadController extends BaseController {
     		                 @RequestParam(value = "FmName",required = false ,defaultValue= "") String FmName
     ) {
     	JsonResponse jsonResponse = new JsonResponse();
+    	logger.info(FmName);
     	try {
     		Page<Map<String,Object>> page = new Page<>(offset, limit);
     		List<Map<String,Object>> data = wxFmListService.getFullList(page,FmName);
