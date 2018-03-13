@@ -16,12 +16,12 @@ Fm_upload.initColumn = function () {
      [
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: true, align: 'center', valign: 'middle'},
-        {title: '歌曲名称', field: 'name', visible: true, align: 'center', valign: 'middle', sortable: true},
-        {title: '歌曲演唱者', field: 'artistorName', visible: true, align: 'center', valign: 'middle', sortable: true},
-        {title: '游客ID', field: 'userId', visible: true, align: 'center', valign: 'middle', sortable: true},
-        {title: '海报', field: 'poster', visible: true, align: 'center', valign: 'middle', sortable: true},
-        {title: '发布状态', field: 'publishStatus', visible: true, align: 'center', valign: 'middle', sortable: true},
-        {title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle', sortable: true}
+        {title: '游客ID', field: 'userId', visible: true, align: 'center', valign: 'middle'},
+        {title: '歌曲名称', field: 'name', visible: true, align: 'center', valign: 'middle'},
+        {title: '歌曲演唱者', field: 'artistorName', visible: true, align: 'center', valign: 'middle'},        
+        {title: '海报', field: 'poster', visible: true, align: 'center', valign: 'middle'},
+        {title: '发布状态', field: 'publishStatus', visible: true, align: 'center', valign: 'middle'},
+        {title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle'}
 
     ];
 	return columns;
@@ -89,18 +89,28 @@ Fm_upload.delete = function () {
     }
 };
 
+Fm_upload.formParams = function(){
+    var queryData = {};
+
+    queryData['FmName'] = $("#FmName").val();
+    console.log($("#FmName").val());
+    
+    return queryData;
+}
+
 /**
  * 查询电台上传列表
  */
 Fm_upload.search = function () {
-    var queryData = {};
-    queryData['condition'] = $("#condition").val();
-    Fm_upload.table.refresh({query: queryData});
+
+    
+    Fm_upload.table.refresh({query: Fm_upload.formParams});
 };
 
 $(function () {
     var defaultColunms = Fm_upload.initColumn();
     var table = new BSTable(Fm_upload.id, "/fm_upload/list", defaultColunms);
-    table.setPaginationType("client");
+//    table.setPaginationType("client");
+//    table.setQueryParams(Fm_upload.formParams);
     Fm_upload.table = table.init();
 });
