@@ -19,13 +19,55 @@ Fm_upload.initColumn = function () {
         {title: '游客ID', field: 'userId', visible: true, align: 'center', valign: 'middle'},
         {title: '歌曲名称', field: 'name', visible: true, align: 'center', valign: 'middle'},
         {title: '歌曲演唱者', field: 'artistorName', visible: true, align: 'center', valign: 'middle'},        
-        {title: '海报', field: 'poster', visible: true, align: 'center', valign: 'middle'},
-        {title: '发布状态', field: 'publishStatus', visible: true, align: 'center', valign: 'middle'},
-        {title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle'}
-
+        {title: '海报', field: 'poster', visible: true, align: 'center', valign: 'middle',formatter: this.imgFormatter},
+        {title: '发布状态', field: 'publishStatus', visible: true, align: 'center', valign: 'middle',formatter:this.publishStatusFormatter},
+        {title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle',formatter:this.statusFormatter},
+        {
+        	title:'操作',
+        	field:'operator',
+        	align:'center',
+        	events:this.operateEvents,
+        	formatter:this.operateFormatter
+        }
     ];
 	return columns;
 };
+
+/**
+ * 商品图片预览显示
+ */
+Fm_upload.imgFormatter = function(value){
+	//console.log(value);
+    return '<img src="' + value + '" style="width:80px; height:auto;" />';
+}
+
+/**
+ * 发布状态转换
+ */
+Fm_upload.publishStatusFormatter = function(value) {
+	if(value == 0){
+		return '<span>未发布</span>';
+	}
+	if(value == 5){
+		return '<span>已发布</span>';
+	}
+	if(value == 10){
+		return '<span>已下架</span>';
+	}
+	
+}
+
+/**
+ * 状态转换
+ */
+Fm_upload.statusFormatter = function(value) {
+	if(value == 0){
+		return '<span>正常</span>';
+	}
+	if(value == -1){
+		return '<span>删除</span>'
+	}
+}
 
 /**
  * 检查是否选中
