@@ -8,9 +8,9 @@ import com.stylefeng.guns.common.persistence.model.WxFmList;
 
 public interface IWxFmListService {
 
-	Map<String,Object> list(int userId,Page<WxFmList> page);
+	Map<String,Object> list(Page<WxFmList> page);
 	
-	List<Map<String,Object>> getFmListByUserId(int userId, Page<WxFmList> page);
+	List<Map<String,Object>> getFmListByUserId( Page<WxFmList> page);
 
 	List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName);
 

@@ -39,10 +39,10 @@ public class WxFmListServiceImpl implements IWxFmListService{
 	private WxFmUserMapper wxFmUserMapper;
 
 	@Override
-	public Map<String,Object> list(int userId,Page<WxFmList> page) {
+	public Map<String,Object> list(Page<WxFmList> page) {
 		Map<String,Object> resultMap = new HashMap<String, Object>();
 		//获取到该用户的播放列表
-		List<Map<String, Object>> list = getFmListByUserId(userId,page);
+		List<Map<String, Object>> list = getFmListByUserId(page);
 		List<Map<String,Object>> fmList = new ArrayList<Map<String,Object>>();
 		//获取该用户的所有播放url
 		for(Map<String,Object> map:list){
@@ -65,10 +65,9 @@ public class WxFmListServiceImpl implements IWxFmListService{
 	}
 
 	@Override
-	public List<Map<String, Object>> getFmListByUserId(int userId,Page<WxFmList> page) {
+	public List<Map<String, Object>> getFmListByUserId(Page<WxFmList> page) {
 		Wrapper<WxFmList> wrapper = new EntityWrapper<WxFmList>();
-		wrapper.eq("user_id", userId)
-		       .eq("status", StatusEnum.NORMAL_STATUS.getVal());
+		wrapper.eq("status", StatusEnum.NORMAL_STATUS.getVal());
 		List<Map<String,Object>> list = wxFmListMapper.selectMapsPage(page, wrapper);
 		return list;
 	}
@@ -80,6 +79,7 @@ public class WxFmListServiceImpl implements IWxFmListService{
 		if(!fmName.equals("")) {
 			wrapper.like("NAME", fmName);
 		}
+		wrapper.orderBy("weight", false).orderBy("id",false);
 		List<Map<String,Object>> list = wxFmListMapper.selectMapsPage(page, wrapper);
 		return list;
 	}

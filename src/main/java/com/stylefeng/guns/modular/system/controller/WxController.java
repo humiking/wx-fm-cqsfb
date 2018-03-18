@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.stylefeng.guns.common.constant.ResultCodeEnum;
 import com.stylefeng.guns.common.controller.BaseController;
 import com.stylefeng.guns.common.persistence.model.WxFmList;
 import com.stylefeng.guns.common.persistence.util.JsonResponse;
@@ -45,27 +46,64 @@ public class WxController extends BaseController{
 			return jsonResponse.setSuccessful().setData(data);
 		} catch (Exception e) {
 			logger.info(e.getMessage());
-			return jsonResponse.setError("服务器繁忙！");
+			return jsonResponse.setError(ResultCodeEnum.SYSTEM_OPERATION_ERROR.getMessage());
 		}
 	}
 	
 	@RequestMapping("/list")
 	@ResponseBody
-	public JsonResponse list(@RequestParam(value = "time") long time,
-			                 @RequestParam(value = "userId",required =false,defaultValue = "1") int userId,
-			                 @RequestParam(value = "current",required = false,defaultValue = "1") int current,
+	public JsonResponse list(@RequestParam(value = "current",required = false,defaultValue = "1") int current,
 			                 @RequestParam(value = "size",required = false,defaultValue = "10") int size){
 		JsonResponse jsonResponse = new JsonResponse();
 		try {
 			logger.info("调用list");
 			Page<WxFmList> page = new Page<WxFmList>(current, size);
-			Map<String,Object> data = wxFmListService.list(userId,page);
+			Map<String,Object> data = wxFmListService.list(page);
+			data.put("total", page.getTotal());
 			return jsonResponse.setSuccessful().setData(data);
 		} catch (Exception e) {
 			logger.info(e.getMessage());
-			return jsonResponse.setError("服务器繁忙！");
+			return jsonResponse.setError(ResultCodeEnum.SYSTEM_OPERATION_ERROR.getMessage());
 		}
 	}
-
 	
+	//添加电台音乐
+	@RequestMapping("add")
+	@ResponseBody
+	public JsonResponse add(){
+		return null;
+	}
+
+	//编辑电台音乐
+	@RequestMapping()
+	@ResponseBody
+	public JsonResponse update(){
+		return null;
+	}
+	
+	//上传海报
+	/**
+	 * 上传文件到阿里云OSS上
+	 *  创建内容: 1）上传文件到OSS中 
+	 *  2） 将文件名存储到session中
+	 *
+	 * @param request
+	 * @param response
+	 * @return 例子：{"filename":https://yjj-img-www.oss-cn-hangzhou.aliyuncs.com/15087254452311508725445231.jpg}
+	 *  method = RequestMethod.POST
+	 */
+	@RequestMapping("/uploadPoster")
+	@ResponseBody
+	public JsonResponse uploadPoster() {
+		JsonResponse jsonResponse = new JsonResponse();
+		return null;
+	}
+	
+	//上传音乐
+	@RequestMapping("uploadMusic")
+	@ResponseBody
+	public JsonResponse uploadMusic() {
+		JsonResponse jsonResponse = new JsonResponse();
+		return null;
+	}
 }

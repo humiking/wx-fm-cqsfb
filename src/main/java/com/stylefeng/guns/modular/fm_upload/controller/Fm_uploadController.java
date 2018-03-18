@@ -3,6 +3,7 @@ package com.stylefeng.guns.modular.fm_upload.controller;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.AlertSystemErrorEnum;
 import com.stylefeng.guns.common.controller.BaseController;
+import com.stylefeng.guns.common.exception.TipMessageException;
 import com.stylefeng.guns.common.persistence.util.JsonResponse;
 import com.stylefeng.guns.modular.system.service.IWxFmListService;
 import com.stylefeng.guns.modular.system.service.impl.WxFmListServiceImpl;
@@ -55,7 +56,7 @@ public class Fm_uploadController extends BaseController {
     		List<Map<String,Object>> data = wxFmListService.getFullList(page,FmName);
     		page.setRecords(data);
 			return this.packForBT(page);
-		} catch(RuntimeException e){
+		} catch(TipMessageException e){
 			logger.info(e.getMessage());
 			return jsonResponse.setError(e.getMessage());
 		} catch (Exception e) {

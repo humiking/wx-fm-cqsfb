@@ -1,8 +1,8 @@
 #==========1.1wx-fm-cqsfb 20180305===============================
 ALTER TABLE wx_fm_list ADD `publish_status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '发布状态：0：未发布  5：已发布   10：已下架';
-ALTER TABLE wx_fm_list ADD `focus_status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '收藏状态：0:未收藏 1:已收藏';
-
-
+ALTER TABLE wx_fm_list ADD `weight` INT(11) DEFAULT '0' COMMENT '权重:值越大越靠前 请输入9999以内的数字';
+ALTER TABLE wx_fm_list ADD `create_time` BIGINT(20) DEFAULT NULL COMMENT '创建时间';
+ALTER TABLE wx_fm_list ADD `update_time` BIGINT(20) DEFAULT NULL COMMENT '更新时间';
 #==========1.1wx-fm-cqsfb 20180224===============================
 DROP TABLE IF EXISTS `wx_mp3url_list`;
 
@@ -51,6 +51,7 @@ CREATE TABLE `wx_fm_list` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='电台列表';
 
+ALTER TABLE wx_fm_list DROP user_id;
 #==========1.1wx-fm-cqsfb 20180224===============================
 CREATE TABLE `wx_banner` (
    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',

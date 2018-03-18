@@ -26,11 +26,6 @@ public class WxFmList extends Model<WxFmList> {
 	@TableId(value="id", type= IdType.AUTO)
 	private Long id;
     /**
-     * 用户ID
-     */
-	@TableField("user_id")
-	private Long userId;
-    /**
      * MP3的播放地址_id
      */
 	@TableField("mp3Url_id")
@@ -64,10 +59,19 @@ public class WxFmList extends Model<WxFmList> {
 	@TableField("publish_status")
 	private Integer publishStatus;
 	/**
-	 * 收藏状态：0:未收藏 1:已收藏
+	 * 权重:值越大越靠前 请输入9999以内的数字
 	 */
-	@TableField("focus_status")
-	private Integer focusStatus;
+	private Integer weight;
+	/**
+	 * 创建时间
+	 */
+	@TableField("create_time")
+	private Long createTime;
+	/**
+	 * 更新时间
+	 */
+	@TableField("update_time")
+	private Long updateTime;
 
 	public Long getId() {
 		return id;
@@ -75,14 +79,6 @@ public class WxFmList extends Model<WxFmList> {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
 	}
 
 	public String getMp3UrlId() {
@@ -146,19 +142,34 @@ public class WxFmList extends Model<WxFmList> {
 		this.publishStatus = publishStatus;
 	}
 
-	public Integer getFocusStatus() {
-		return focusStatus;
+	public Integer getWeight() {
+		return weight;
 	}
 
-	public void setFocusStatus(Integer focusStatus) {
-		this.focusStatus = focusStatus;
+	public void setWeight(Integer weight) {
+		this.weight = weight;
+	}
+	
+	public Long getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Long createTime) {
+		this.createTime = createTime;
+	}
+
+	public Long getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Long updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	@Override
 	public String toString() {
 		return "WxFmList{" +
 			"id=" + id +
-			", userId=" + userId +
 			", mp3UrlId=" + mp3UrlId +
 			", name=" + name +
 			", poster=" + poster +
@@ -166,7 +177,7 @@ public class WxFmList extends Model<WxFmList> {
 			", totalDuration=" + totalDuration +
 			", status=" + status +
 			", publishStatus=" + publishStatus +
-			", focusStatus=" + focusStatus +
+			", weight=" + weight +
 			"}";
 	}
 }
