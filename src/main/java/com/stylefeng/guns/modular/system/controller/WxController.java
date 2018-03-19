@@ -21,7 +21,11 @@ import com.stylefeng.guns.modular.system.service.IWxMp3urlListService;
 import com.stylefeng.guns.modular.system.service.IWxService;
 import com.stylefeng.guns.modular.system.service.impl.WxFmListServiceImpl;
 import com.stylefeng.guns.modular.system.service.impl.WxMp3urlListServiceImpl;
-
+/**
+ * 用于小程序端口的
+ * @author Nijin
+ *
+ */
 @Controller
 @RequestMapping("/wx")
 public class WxController extends BaseController{
@@ -67,43 +71,4 @@ public class WxController extends BaseController{
 		}
 	}
 	
-	//添加电台音乐
-	@RequestMapping("add")
-	@ResponseBody
-	public JsonResponse add(){
-		return null;
-	}
-
-	//编辑电台音乐
-	@RequestMapping()
-	@ResponseBody
-	public JsonResponse update(){
-		return null;
-	}
-	
-	//上传海报
-	/**
-	 * 上传文件到阿里云OSS上
-	 *  创建内容: 1）上传文件到OSS中 
-	 *  2） 将文件名存储到session中
-	 *
-	 * @param request
-	 * @param response
-	 * @return 例子：{"filename":https://yjj-img-www.oss-cn-hangzhou.aliyuncs.com/15087254452311508725445231.jpg}
-	 *  method = RequestMethod.POST
-	 */
-	@RequestMapping("/uploadPoster")
-	@ResponseBody
-	public JsonResponse uploadPoster() {
-		JsonResponse jsonResponse = new JsonResponse();
-		return null;
-	}
-	
-	//上传音乐
-	@RequestMapping("uploadMusic")
-	@ResponseBody
-	public JsonResponse uploadMusic() {
-		JsonResponse jsonResponse = new JsonResponse();
-		return null;
-	}
 }

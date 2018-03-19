@@ -36,22 +36,23 @@ Fm_upload.initColumn = function () {
 /**
  * 商品图片预览显示
  */
-Fm_upload.imgFormatter = function(value){
-	//console.log(value);
-    return '<img src="' + value + '" style="width:80px; height:auto;" />';
+Fm_upload.imgFormatter = function(value, row, index){
+	var poster = row.poster;
+    return '<img src="' + poster + '" style="width:80px; height:auto;" />';
 }
 
 /**
  * 发布状态转换
  */
-Fm_upload.publishStatusFormatter = function(value) {
-	if(value == 0){
+Fm_upload.publishStatusFormatter = function(value, row, index) {
+	var publishStatus = row.publishStatus;
+	if(publishStatus == 0){
 		return '<span>未发布</span>';
 	}
-	if(value == 5){
+	if(publishStatus == 5){
 		return '<span>已发布</span>';
 	}
-	if(value == 10){
+	if(publishStatus == 10){
 		return '<span>已下架</span>';
 	}
 	
@@ -60,13 +61,40 @@ Fm_upload.publishStatusFormatter = function(value) {
 /**
  * 状态转换
  */
-Fm_upload.statusFormatter = function(value) {
-	if(value == 0){
+Fm_upload.statusFormatter = function(value, row, index) {
+	var status = row.status;
+	if(status == 0){
 		return '<span>正常</span>';
 	}
-	if(value == -1){
-		return '<span>删除</span>'
+	if(status == -1){
+		return '<span>删除</span>';
 	}
+}
+
+/**
+ * 按钮显示
+ */
+Fm_upload.operateFormatter = function(value,row,index) {
+	var status = row.status;
+	var publishStatus = row.publishStatus;
+	var deleteBtn = '<button class="btn delete btn-primary button-margin" type="button"><i class="fa btn-primary"></i>删除</button>',
+	    editBtn = '<button class="btn edit btn-info button-margin" type="button"><i class="fa fa-edit"></i>编辑</button>',
+	    groundingBtn = '<button class="btn grounding btn-primary button-margin" type="button"><i class="fa btn-primary"></i>发布</button>',
+		undercarriageBtn = '<button class="btn undercarriage btn-primary button-margin" type="button"><i class="fa btn-primary"></i>下架</button>',
+        rankBtn = '<button class="btn rankBtn  button-margin" type="button" ' +
+			'style="background-color: #FFFFFF;  border-color: #000;  color: #000;"><i class="fa rankBtn"></i>设置排名</button>';
+    if(status == 0){
+    	if(publishStatus == 0){
+    		return [deleteBtn,editBtn,groundingBtn,rankBtn].join("");
+    	}else if(publishStatus == 5){
+    		return [undercarriageBtn,rankBtn].join("");
+    	}else if(publishStatus == 10){
+    		return [deleteBtn,editBtn,groundingBtn,rankBtn].join("");
+    	}
+    	
+    	
+    }
+	
 }
 
 /**
@@ -131,22 +159,18 @@ Fm_upload.delete = function () {
     }
 };
 
-Fm_upload.formParams = function(){
-    var queryData = {};
 
-    queryData['FmName'] = $("#FmName").val();
-    console.log($("#FmName").val());
-    
-    return queryData;
-}
 
 /**
  * 查询电台上传列表
  */
 Fm_upload.search = function () {
+	 var queryData = {};
 
+	    queryData['FmName'] = $("#FmName").val();
+	    console.log($("#FmName").val());
     
-    Fm_upload.table.refresh({query: Fm_upload.formParams});
+    Fm_upload.table.refresh({query: queryData});
 };
 
 $(function () {

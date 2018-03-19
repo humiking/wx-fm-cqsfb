@@ -50,7 +50,6 @@ public class Fm_uploadController extends BaseController {
     		                 @RequestParam(value = "FmName",required = false ,defaultValue= "") String FmName
     ) {
     	JsonResponse jsonResponse = new JsonResponse();
-    	logger.info(FmName);
     	try {
     		Page<Map<String,Object>> page = new Page<>(offset, limit);
     		List<Map<String,Object>> data = wxFmListService.getFullList(page,FmName);
@@ -89,16 +88,6 @@ public class Fm_uploadController extends BaseController {
         return PREFIX + "fm_upload_edit.html";
     }
 
-
-    /**
-     * 新增电台上传
-     */
-    @RequestMapping(value = "/add")
-    @ResponseBody
-    public Object add() {
-        return super.SUCCESS_TIP;
-    }
-
     /**
      * 删除电台上传
      */
@@ -106,16 +95,6 @@ public class Fm_uploadController extends BaseController {
     @ResponseBody
     public Object delete() {
         return SUCCESS_TIP;
-    }
-
-
-    /**
-     * 修改电台上传
-     */
-    @RequestMapping(value = "/update")
-    @ResponseBody
-    public Object update() {
-        return super.SUCCESS_TIP;
     }
 
     /**
@@ -126,4 +105,44 @@ public class Fm_uploadController extends BaseController {
     public Object detail() {
         return null;
     }
+    
+	//添加电台音乐
+	@RequestMapping("/add")
+	@ResponseBody
+	public JsonResponse add(){
+		return null;
+	}
+
+	//编辑电台音乐
+	@RequestMapping("/update")
+	@ResponseBody
+	public JsonResponse update(){
+		return null;
+	}
+	
+	//上传海报
+	/**
+	 * 上传文件到阿里云OSS上
+	 *  创建内容: 1）上传文件到OSS中 
+	 *  2） 将文件名存储到session中
+	 *
+	 * @param request
+	 * @param response
+	 * @return 例子：{"filename":https://yjj-img-www.oss-cn-hangzhou.aliyuncs.com/15087254452311508725445231.jpg}
+	 *  method = RequestMethod.POST
+	 */
+	@RequestMapping("/uploadPoster")
+	@ResponseBody
+	public JsonResponse uploadPoster() {
+		JsonResponse jsonResponse = new JsonResponse();
+		return null;
+	}
+	
+	//上传音乐
+	@RequestMapping("uploadMusic")
+	@ResponseBody
+	public JsonResponse uploadMusic() {
+		JsonResponse jsonResponse = new JsonResponse();
+		return null;
+	}
 }
