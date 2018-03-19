@@ -1,12 +1,10 @@
 <view class="index">
     <!--轮播图  -->
-    <loading hidden="{{hidden_loading}}" bindchange="loadingChange">
-    加载中...
-  </loading>  
+    
     <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" class="text index swiper" id="swiper">
         <block wx:for="{{imgUrls}}">
             <swiper-item class="swiper-item">
-                <image src="{{item}}" class="slide-image" width="100%" />
+                <image src="{{item}}" class="slide-image" width="33%" />
             </swiper-item>
         </block>
     </swiper>
@@ -14,7 +12,7 @@
     <view class="container_scroll_view" style='margin-top:{{banner_height}}px;' >
     <scroll-view class="scroll_view" scroll-top="false" >
         
-        <view hidden='{{hidden_top_icon}}' class='loading_icon'>正在刷新...</view>
+        <view hidden='{{hidden_loading}}' class='loading_icon'>正在刷新...</view>
         <block wx:for="{{list_sf}}" wx:for-index="idx" wx:for-item="item">
             <view class="playlist">
                 <view class="widgets__item" bindtap='playThisMusic' data-id='{{item.id}}'>
@@ -27,8 +25,9 @@
             </view>
         </block>
         <view class="blank_area">
+          <view wx:if="{{hasMore}}" class='loading_icon'>加载更多...</view>
+          <view wx:if="{{!hasMore}}" class='loading_icon'>————————已经是底线了————————</view> 
         </view>
-           <view hidden='{{hidden_bottom_icon}}' class='loading_icon'>正在刷新...</view>
     </scroll-view>
     </view>    
     <!--播放按钮-->

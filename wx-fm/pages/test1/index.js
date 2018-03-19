@@ -1,6 +1,6 @@
 var app = getApp();
 var util = require("../../utils/util.js");
-
+var backgroundAudioManager = wx.getBackgroundAudioManager();
 // pages/test1/index.js
 Page({
 
@@ -8,6 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    //加载中
+    hidden_loading: false,//显示加载提示语
     //播放参数
     playing: false,
     list_sf: [],//播放列表
@@ -38,7 +40,10 @@ Page({
       currentPlayUrl: data.currentPlayUrl,
       index:data.index,
       currentDurationTime: util.formatduration(data.currentTotalDuration),
-      currentPlayTime: util.formatduration(data.currentPosition)
+      currentPlayTime: util.formatduration(data.currentPosition),
+      hidden_loading:true
+
+
 
     })
 
@@ -46,6 +51,7 @@ Page({
     wx.setNavigationBarTitle({
       title: that.data.currentPlayInfo.name
     })
+    
     
 
   },
@@ -65,10 +71,11 @@ Page({
         currentPlayUrl: data.currentPlayUrl,
         index: data.index,
         currentDurationTime: util.formatduration(data.currentTotalDuration),
-        currentPlayTime: util.formatduration(data.currentPosition)
+        currentPlayTime: util.formatduration(data.currentPosition),
+        hidden_loading: true
 
       })
-      
+
 
     }
 
@@ -78,20 +85,21 @@ Page({
 
   playingtoggle:function(){
     var that = this;
-    var backgroundAudioManager = wx.getBackgroundAudioManager();
+
+    backgroundAudioManager.onTimeUpdate(function (callback){
+      wx.hideLoading();
+
+    })
     backgroundAudioManager.onEnded(function (callback) {
       that.setData({
         playing: false
       })
-
     })
 
-    
     backgroundAudioManager.onStop(function (callback) {
       that.setData({
         playing: false
       })
-
 
     })
     backgroundAudioManager.onPause(function(callback){
@@ -144,10 +152,37 @@ Page({
     app.globalData.currentPlayInfo = that.data.currentPlayInfo;
     app.globalData.currentPlayUrl = that.data.currentPlayUrl;
     app.globalData.index = that.data.index;
+    app.globalData.hidden_loading = that.data.hidden_loading;
 
   },
   playother:function(event){
-    // var offset = event.getc 
+    var that = this;
+    var offset = Number.parseInt(event.currentTarget.dataset.other);
+    var index = Number.parseInt(that.data.index);
+    index += offset;
+    if(index < 0){
+      index = that.data.list_sf.length;
+    } 
+    if(index >= that.data.list_sf.length){
+      index = 0;
+    }
+    var currentPlayInfo = that.data.list_sf[index];
+    that.setData({
+      playing: false,
+      activePercent: 0,//进度条播放百分比
+      currentPosition: 0,//当前播放时间
+      // currentTotalDuration: currentPlayInfo.,//当前电台的总时长
+      // currentDuration: 0,//该部分的播放时长
+      currentPlayInfo: currentPlayInfo,//当前播放电台的信息
+      // currentPlayUrl: {},//当前播放的url
+      index: index,//索引
+
+    })
+    wx.setNavigationBarTitle({
+      title: that.data.currentPlayInfo.name,
+    })
+    that.playingtoggle();
+    
 
   }
 })

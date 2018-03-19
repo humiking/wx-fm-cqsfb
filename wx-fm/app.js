@@ -1,8 +1,11 @@
 var hostInfo = require("host.js");
 var https = hostInfo.online;
+var backgroundAudioManager = wx.getBackgroundAudioManager();
 //app.js
 App({
   globalData: {
+    //加载
+    hidden_loading: false,//显示加载提示语
     hasLogin: true,
     list_am: [], //播放列表，已经经历过播放模式排序后的
     index_am: 0,
@@ -23,6 +26,7 @@ App({
   },
 
   onLaunch: function () {
+    
 
   },
   /**

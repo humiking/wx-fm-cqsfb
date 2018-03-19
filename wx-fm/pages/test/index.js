@@ -10,7 +10,7 @@ var backgroundAudioManager = wx.getBackgroundAudioManager();
 Page({
   data: {
     //加载刷新
-    hidden_loading:false,//显示加载提示语
+    hidden_loading:true,//显示加载提示语
     hidden_bottom_icon:true,//隐藏加载中
     hidden_top_icon:true,//隐藏刷新
     hasMore:false,//是否还有下划列表
@@ -42,11 +42,15 @@ Page({
   onLoad: function (options) {
     var appData = app.globalData;
     var that = this;
+    
     //改变标题
     wx.setNavigationBarTitle({
       title: '珊瑚坝电台'
-
     })
+    wx.showLoading({
+      title: '加载中...'
+    })
+    var page = that.data.page;
     var query = wx.createSelectorQuery().in(this);
     query.select('#swiper').boundingClientRect(function (res) {
       that.setData({
@@ -54,15 +58,26 @@ Page({
       })
     }).exec();
     //播放列表
-    var timestamp = Date.parse(new Date());
     wx.request({
-      url: https + '/wx/list?time=' + timestamp,
+      url: https + '/wx/list?time=11',
       method: 'GET',
       success: function (res) {
         if (res.data.successful) {
+          var page = that.data.page;
+          var size = that.data.size;
+          var total = page*size;
+          if (total >= res.data.data.total){
+            that.setData({
+              hasMore:false
+            })
+          }else{
+            that.setData({
+              hasMore:true
+            })
+          }
           that.setData({
-            hidden_loading:true,
             list_sf: res.data.data.list_sf
+            
           })
 
           if (that.data.currentPlayInfo.name === undefined){
@@ -82,6 +97,8 @@ Page({
 
           appData.list_sf = res.data.data.list_sf;
           appData.index_am = appData.list_sf.length;
+          
+          wx.hideLoading();
         }
       }
     })
@@ -135,11 +152,7 @@ Page({
     //获取后台播放管理器
     //更新进度条
     backgroundAudioManager.onTimeUpdate(function (callback) {
-      if (!that.data.hidden_loading){
-      that.setData({
-        hidden_loading: true
-      })
-      }
+      wx.hideLoading();
       var duration = backgroundAudioManager.duration;
       var currentTime = backgroundAudioManager.currentTime;
       var percent = util.formPercent(currentTime, duration);
@@ -165,11 +178,18 @@ Page({
       })
       var index = that.data.index;
       ++index;
+      if (index >= that.data.list_sf.length){
+        that.setData({
+          playing: false
+        })
+      return
+      }
       that.setData({
-        currentPlayInfo: data.list_sf[index],
-        index: index
+        currentPlayInfo: that.data.list_sf[index],
+        index: index,
+        playing:false
       })
-      app.globalData.currentPlayInfo = data.list_sf[index];
+      app.globalData.currentPlayInfo = that.data.list_sf[index];
       that.isplay();
     })
     //设置手动结束监听器
@@ -182,8 +202,11 @@ Page({
     })
     //后台播放等候
     backgroundAudioManager.onWaiting(function (callback) {
+      wx.showLoading({
+        title: '加载中...',
+      })
       that.setData({
-        hidden_loading:false
+        playImage: "http://poster-fm-gurui.oss-cn-shanghai.aliyuncs.com/icon-fm/pause.png",
       })
     })
     
@@ -213,6 +236,7 @@ Page({
       })
       wx.pauseBackgroundAudio();
     }
+    
   },
 
   //切换页面
@@ -272,17 +296,110 @@ onPullDownRefresh:function(){
   that.setData({
     hidden_top_icon: false
   })
-  that.onLoad();
+  wx.showLoading({
+    title: '加载中...'
+  })
+  var appData = app.globalData;
+  var page = that.data.page;
+  var query = wx.createSelectorQuery().in(this);
+  query.select('#swiper').boundingClientRect(function (res) {
+    that.setData({
+      banner_height: res.height // 这个组件内 #the-id 节点的宽度
+    })
+  }).exec();
+  //播放列表
+  wx.request({
+    url: https + '/wx/list?time=11&current=' + page,
+    method: 'GET',
+    success: function (res) {
+      if (res.data.successful) {
+        var page = that.data.page;
+        var size = that.data.size;
+        var total = page * size;
+        if (total >= res.data.data.total) {
+          that.setData({
+            hasMore: false
+          })
+        } else {
+          that.setData({
+            hasMore: true
+          })
+        }
+        that.setData({
+          list_sf: res.data.data.list_sf
+
+        })
+
+        if (that.data.currentPlayInfo.name === undefined) {
+          that.setData({
+            currentPlayInfo: res.data.data.list_sf[0],
+            currentPlayUrl: res.data.data.list_sf[0].urlList[0].mp3Url,
+            currentTotalDuration: res.data.data.list_sf[0].totalDuration,
+            currentDuration: res.data.data.list_sf[0].urlList[0].duration
+
+          })
+          appData.currentPlayInfo = res.data.data.list_sf[0];
+          appData.curplay = appData.currentPlayInfo.urlList[0].mp3Url;
+          appData.currentTotalDuration = appData.currentPlayInfo.totalDuration
+          appData.currentDuration = appData.currentPlayInfo.urlList[0].duration
+
+        }
+
+        appData.list_sf = res.data.data.list_sf;
+        appData.index_am = appData.list_sf.length;
+
+        wx.hideLoading();
+      }
+    }
+  })
   setInterval(function(){
     that.setData({
       hidden_top_icon: true
     })
-  },1000)
+  },1500)
   
   wx.stopPullDownRefresh();
   
 },
 onReachBottom:function(){
+  var that = this;
+  var current = that.data.page;
+  var appData = app.globalData;
+  current++;
+  wx.showLoading({
+    title: '加载中...',
+  })
+  wx.request({
+    url: https + '/wx/list?time=11&current=' + current,
+    success:function(res){
+      if (res.data.successful) {
+        var list_sf = that.data.list_sf;
+        list_sf = list_sf.concat(res.data.data.list_sf);
+        that.setData({
+          list_sf: list_sf
+        })
+        var page = that.data.page;
+        var size = that.data.size;
+        var total = page * size;
+        if (total >= res.data.data.total) {
+          that.setData({
+            hasMore: false
+          })
+        } else {
+          that.setData({
+            hasMore: true
+          })
+        }
+        
+
+        appData.list_sf = list_sf;
+        appData.index_am = appData.list_sf.length;
+
+        wx.hideLoading();
+      }
+
+    }
+  })
   
   
   
