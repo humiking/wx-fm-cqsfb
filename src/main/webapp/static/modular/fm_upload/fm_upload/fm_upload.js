@@ -16,7 +16,6 @@ Fm_upload.initColumn = function () {
      [
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: true, align: 'center', valign: 'middle'},
-        {title: '游客ID', field: 'userId', visible: true, align: 'center', valign: 'middle'},
         {title: '歌曲名称', field: 'name', visible: true, align: 'center', valign: 'middle'},
         {title: '歌曲演唱者', field: 'artistorName', visible: true, align: 'center', valign: 'middle'},        
         {title: '海报', field: 'poster', visible: true, align: 'center', valign: 'middle',formatter: this.imgFormatter},

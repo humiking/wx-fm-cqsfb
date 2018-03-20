@@ -26,11 +26,6 @@ public class WxFmList extends Model<WxFmList> {
 	@TableId(value="id", type= IdType.AUTO)
 	private Long id;
     /**
-     * MP3的播放地址_id
-     */
-	@TableField("mp3Url_id")
-	private String mp3UrlId;
-    /**
      * 歌曲名称
      */
 	@TableField("NAME")
@@ -72,6 +67,11 @@ public class WxFmList extends Model<WxFmList> {
 	 */
 	@TableField("update_time")
 	private Long updateTime;
+	/**
+	 * 发布时间
+	 */
+	@TableField("publish_time")
+	private Long publishTime;
 
 	public Long getId() {
 		return id;
@@ -79,14 +79,6 @@ public class WxFmList extends Model<WxFmList> {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getMp3UrlId() {
-		return mp3UrlId;
-	}
-
-	public void setMp3UrlId(String mp3UrlId) {
-		this.mp3UrlId = mp3UrlId;
 	}
 
 	public String getName() {
@@ -165,19 +157,21 @@ public class WxFmList extends Model<WxFmList> {
 	public void setUpdateTime(Long updateTime) {
 		this.updateTime = updateTime;
 	}
+    
+	
+	public Long getPublishTime() {
+		return publishTime;
+	}
+
+	public void setPublishTime(Long publishTime) {
+		this.publishTime = publishTime;
+	}
 
 	@Override
 	public String toString() {
-		return "WxFmList{" +
-			"id=" + id +
-			", mp3UrlId=" + mp3UrlId +
-			", name=" + name +
-			", poster=" + poster +
-			", artistorName=" + artistorName +
-			", totalDuration=" + totalDuration +
-			", status=" + status +
-			", publishStatus=" + publishStatus +
-			", weight=" + weight +
-			"}";
+		return "WxFmList [id=" + id + ", name=" + name + ", poster=" + poster
+				+ ", artistorName=" + artistorName + ", totalDuration=" + totalDuration + ", status=" + status
+				+ ", publishStatus=" + publishStatus + ", weight=" + weight + ", createTime=" + createTime
+				+ ", updateTime=" + updateTime + ", publishTime=" + publishTime + "]";
 	}
 }

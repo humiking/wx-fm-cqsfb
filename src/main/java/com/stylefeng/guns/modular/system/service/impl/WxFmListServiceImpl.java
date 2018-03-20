@@ -10,14 +10,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aliyun.oss.common.utils.StringUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.stylefeng.guns.common.constant.PublishStatusEnum;
 import com.stylefeng.guns.common.constant.StatusEnum;
 import com.stylefeng.guns.common.persistence.dao.WxFmListMapper;
 import com.stylefeng.guns.common.persistence.dao.WxFmUserMapper;
 import com.stylefeng.guns.common.persistence.dao.WxMp3urlListMapper;
 import com.stylefeng.guns.common.persistence.model.WxFmList;
+import com.stylefeng.guns.common.persistence.model.WxMp3urlList;
 import com.stylefeng.guns.modular.system.service.IWxFmListService;
 import com.stylefeng.guns.modular.system.service.IWxMp3urlListService;
 
@@ -53,7 +56,6 @@ public class WxFmListServiceImpl implements IWxFmListService{
 			fmMap.put("artistorName", map.get("artistorName"));
 			fmMap.put("totalDuration", map.get("totalDuration"));
 			
-			String[] mp3UrlId = ((String)map.get("mp3UrlId")).split(",");
 			long id = (Long)map.get("id");
 			List<Map<String,Object>> urlList = wxMp3urlListService.getmp3UrlByFmId(id);
 			fmMap.put("urlList", urlList);
@@ -67,22 +69,60 @@ public class WxFmListServiceImpl implements IWxFmListService{
 	@Override
 	public List<Map<String, Object>> getFmListByUserId(Page<WxFmList> page) {
 		Wrapper<WxFmList> wrapper = new EntityWrapper<WxFmList>();
-		wrapper.eq("status", StatusEnum.NORMAL_STATUS.getVal());
+		wrapper.eq("status", StatusEnum.NORMAL_STATUS.getVal())
+		       .eq("publish_status", PublishStatusEnum.PUBLISHING_STATUS.getVal());
 		List<Map<String,Object>> list = wxFmListMapper.selectMapsPage(page, wrapper);
 		return list;
 	}
 
 	@Override
-	public List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName) {
+	public List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName, Integer publishStatus, String minCreateTime, String maxCreateTime, String minPublishTime, String maxPublishTime) {
 		//获取所有的播放音乐列表
 		Wrapper<WxFmList> wrapper = new EntityWrapper<WxFmList>();
 		if(!fmName.equals("")) {
 			wrapper.like("NAME", fmName);
+			wrapper.like("artistor_name", fmName);
 		}
+		if(publishStatus != -1 ){
+			wrapper.eq("publish_status", publishStatus);
+		}
+		
+		if(!StringUtils.isNullOrEmpty(minCreateTime)){
+			wrapper.ge("create_time", minCreateTime);
+		}
+		if(!StringUtils.isNullOrEmpty(maxCreateTime)){
+			wrapper.le("create_time", maxCreateTime);
+		}
+		
+		if(!StringUtils.isNullOrEmpty(minPublishTime)){
+			wrapper.ge("publish_time", minPublishTime);
+		}
+		if(!StringUtils.isNullOrEmpty(maxPublishTime)){
+			wrapper.le("publish_time", maxPublishTime);
+		}
+		
 		wrapper.orderBy("weight", false).orderBy("id",false);
 		List<Map<String,Object>> list = wxFmListMapper.selectMapsPage(page, wrapper);
 		return list;
 	}
+
+	@Override
+	public Map<String, Object> detail(long fmId) {
+		WxFmList wxFmList = wxFmListMapper.selectById(fmId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", wxFmList.getId());
+		map.put("name", wxFmList.getName());
+		map.put("artistorName", wxFmList.getArtistorName());
+		map.put("poster", wxFmList.getPoster());
+		map.put("publishStatus", wxFmList.getPublishStatus());
+		map.put("status", wxFmList.getStatus());
+		
+		List<WxMp3urlList> list = wxMp3urlListService.getWxMp3urlListByFmId(fmId);
+		map.put("mp3urlList", list);
+		return map;
+	}
+
+
 	
 	
 

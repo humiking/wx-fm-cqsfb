@@ -1,25 +1,35 @@
 package com.stylefeng.guns.modular.fm_upload.controller;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.stylefeng.guns.common.constant.AlertSystemErrorEnum;
-import com.stylefeng.guns.common.controller.BaseController;
-import com.stylefeng.guns.common.exception.TipMessageException;
-import com.stylefeng.guns.common.persistence.util.JsonResponse;
-import com.stylefeng.guns.modular.system.service.IWxFmListService;
-import com.stylefeng.guns.modular.system.service.impl.WxFmListServiceImpl;
-
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import com.aliyun.oss.common.utils.StringUtils;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.stylefeng.guns.common.constant.AlertSystemErrorEnum;
+import com.stylefeng.guns.common.controller.BaseController;
+import com.stylefeng.guns.common.exception.TipMessageException;
+import com.stylefeng.guns.common.persistence.util.JsonResponse;
+import com.stylefeng.guns.common.persistence.util.OSSUploadUtil;
+import com.stylefeng.guns.modular.system.service.IWxFmListService;
 
 /**
  * 电台上传控制器
@@ -37,6 +47,9 @@ public class Fm_uploadController extends BaseController {
     
     @Autowired
     private IWxFmListService wxFmListService;
+    
+    @Autowired
+    private OSSUploadUtil oSSUploadUtil;
 
    
     
@@ -46,13 +59,18 @@ public class Fm_uploadController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(@RequestParam("limit") int limit,//每页条数
-    		                 @RequestParam("offset") int offset,//当前页
-    		                 @RequestParam(value = "FmName",required = false ,defaultValue= "") String FmName
+    		           @RequestParam("offset") int offset,//当前页
+    		           @RequestParam(value = "FmName",required = false ,defaultValue= "") String FmName,//
+    		           @RequestParam(value = "publishStatus",required = false,defaultValue= "-1") Integer publishStatus,//发布状态
+    		           @RequestParam(value = "minCreateTime",required = false,defaultValue= "") String minCreateTime,//创建时间下限
+    		           @RequestParam(value = "maxCreateTime",required = false,defaultValue= "") String maxCreateTime,//创建时间上限
+    		           @RequestParam(value = "minPublishTime",required = false,defaultValue= "") String minPublishTime,//发布时间下限
+    		           @RequestParam(value = "maxPublishTime",required = false,defaultValue= "") String maxPublishTime//发布时间上限
     ) {
     	JsonResponse jsonResponse = new JsonResponse();
     	try {
     		Page<Map<String,Object>> page = new Page<>(offset, limit);
-    		List<Map<String,Object>> data = wxFmListService.getFullList(page,FmName);
+    		List<Map<String,Object>> data = wxFmListService.getFullList(page,FmName,publishStatus,minCreateTime,maxCreateTime,minPublishTime,maxPublishTime);
     		page.setRecords(data);
 			return this.packForBT(page);
 		} catch(TipMessageException e){
@@ -102,14 +120,26 @@ public class Fm_uploadController extends BaseController {
      */
     @RequestMapping(value = "/detail")
     @ResponseBody
-    public Object detail() {
-        return null;
+    public Object detail(@RequestParam("fmId") long  fmId 
+                         ) {
+    	JsonResponse jsonResponse = new JsonResponse();
+    	try {
+			Map<String,Object> data = wxFmListService.detail(fmId);
+    		return jsonResponse.setSuccessful().setData(data);
+		} catch(TipMessageException e){
+			logger.info(e.getMessage());
+			return jsonResponse.setError(e.getMessage());
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return jsonResponse.setError(AlertSystemErrorEnum.SYSTEM_ERROR_REPORT.getMessage());
+		}
     }
     
 	//添加电台音乐
 	@RequestMapping("/add")
 	@ResponseBody
 	public JsonResponse add(){
+		
 		return null;
 	}
 
@@ -133,9 +163,48 @@ public class Fm_uploadController extends BaseController {
 	 */
 	@RequestMapping("/uploadPoster")
 	@ResponseBody
-	public JsonResponse uploadPoster() {
+	public JsonResponse uploadPoster(@RequestPart("file") MultipartFile file, 
+			                         ModelMap modelMap,
+			                         HttpServletRequest request,
+			                         HttpServletResponse response
+			                         ) {
 		JsonResponse jsonResponse = new JsonResponse();
-		return null;
+		String path = null;
+		String oldPath = request.getParameter("oldPath");
+		try {
+			if(request instanceof MultipartHttpServletRequest){
+				logger.info("看该文件是否是MultipartHttpServletRequest");
+				if(file == null){
+					logger.info("请求中没有文件。。。");
+					logger.info("request file null oldPath:"+oldPath);
+					return jsonResponse.setError("请求中没有文件！");
+				}
+				logger.info("request file name :"+file.getName()+","+file.getOriginalFilename()+","+file.getSize());
+				path = oSSUploadUtil.uploadFile("", file);
+				
+				if(StringUtils.isNullOrEmpty(StringUtils.trim(oldPath))){
+					String key = oldPath.split("/")[oldPath.split("/").length-1];
+					oSSUploadUtil.removeFile("", key);
+				}				
+				
+			} else{
+				logger.error("no right request!");
+			}
+			modelMap.addAttribute("images", path);
+			Map<String,Object> result = new HashMap<String,Object>();
+			result.put("filename", path);
+			logger.info("上传文件接口返回数据，result:"+result.toString());
+			return jsonResponse.setSuccessful().setData(result);
+		} catch(TipMessageException e){
+			logger.info(e.getMessage());
+			return jsonResponse.setError(e.getMessage());
+		} catch(IOException e){
+			logger.error("上传文件出现异常",e);
+			return jsonResponse.setError("上传文件出现异常");
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return jsonResponse.setError(AlertSystemErrorEnum.SYSTEM_ERROR_REPORT.getMessage());
+		}
 	}
 	
 	//上传音乐

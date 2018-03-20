@@ -15,6 +15,7 @@
 		<result column="publish_status" property="publishStatus" />
 		<result column="create_time" property="createTime" />
 		<result column="update_time" property="updateTime" />
+		<result column="publish_time" property="publishTime" />
 	</resultMap>
 
 </mapper>

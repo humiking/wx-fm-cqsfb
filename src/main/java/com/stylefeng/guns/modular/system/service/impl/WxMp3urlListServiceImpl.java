@@ -37,4 +37,12 @@ public class WxMp3urlListServiceImpl implements IWxMp3urlListService{
 		return resultList;
 	}
 
+	@Override
+	public List<WxMp3urlList> getWxMp3urlListByFmId(long fmId) {
+		Wrapper<WxMp3urlList> wrapper = new EntityWrapper<WxMp3urlList>();
+		wrapper.eq("fm_id", fmId);
+		List<WxMp3urlList> list = wxMp3urlListMapper.selectList(wrapper);
+		return list;
+	}
+
 }

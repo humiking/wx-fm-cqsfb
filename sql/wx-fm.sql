@@ -3,10 +3,12 @@ ALTER TABLE wx_fm_list ADD `publish_status` TINYINT(4) NOT NULL DEFAULT '0' COMM
 ALTER TABLE wx_fm_list ADD `weight` INT(11) DEFAULT '0' COMMENT '权重:值越大越靠前 请输入9999以内的数字';
 ALTER TABLE wx_fm_list ADD `create_time` BIGINT(20) DEFAULT NULL COMMENT '创建时间';
 ALTER TABLE wx_fm_list ADD `update_time` BIGINT(20) DEFAULT NULL COMMENT '更新时间';
+ALTER TABLE wx_fm_list ADD `publish_time` BIGINT(20) DEFAULT NULL COMMENT '发布时间';
 
 ALTER TABLE wx_mp3url_list ADD `create_time` BIGINT(20) DEFAULT NULL COMMENT '创建时间';
 ALTER TABLE wx_mp3url_list ADD `update_time` BIGINT(20) DEFAULT NULL COMMENT '更新时间';
 
+alter table wx_fm_list drop `mp3Url_id` ;
 ALTER TABLE wx_fm_list DROP `focus_status`;
 ALTER TABLE wx_fm_list DROP `user_id`;
 #==========1.1wx-fm-cqsfb 20180224===============================
