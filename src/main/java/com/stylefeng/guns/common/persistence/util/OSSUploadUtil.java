@@ -16,9 +16,9 @@ public class OSSUploadUtil implements FileUtil{
 	
 	private static Logger logger = Logger.getLogger(OSSUploadUtil.class);
 	
-	private final String ACCESS_KEY_ID = "LTAI4Aq5P1qnq0Ag";
-	private final String ACCESS_KEY_SECRET = "D9n42csyD6D8eLNg9fy8dxhdnlNckm";
-	private final String END_POINT = "http://oss-cn-shanghai.aliyuncs.com";
+	private final String ACCESS_KEY_ID = "";
+	private final String ACCESS_KEY_SECRET = "";
+	private final String END_POINT ="";
 	private final String IMG_SERVICE = "music-fm";
 
 	// 初始化一个OSSClient
