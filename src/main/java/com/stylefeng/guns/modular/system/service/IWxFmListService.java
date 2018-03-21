@@ -23,4 +23,6 @@ public interface IWxFmListService {
 	void update(String name, String poster, String artistorName, long totalDuration, Integer weight,
 			String urlAndDuration, Long fmId);
 
+	void delete(long fmId);
+
 }

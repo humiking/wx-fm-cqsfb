@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.aliyun.oss.common.utils.StringUtils;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.AlertSystemErrorEnum;
+import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.common.controller.BaseController;
 import com.stylefeng.guns.common.exception.TipMessageException;
 import com.stylefeng.guns.common.persistence.util.JsonResponse;
@@ -59,8 +60,7 @@ public class Fm_uploadController extends BaseController {
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(@RequestParam("limit") int limit,//每页条数
-    		           @RequestParam("offset") int offset,//当前页
+    public Object list(
     		           @RequestParam(value = "FmName",required = false ,defaultValue= "") String FmName,//
     		           @RequestParam(value = "publishStatus",required = false,defaultValue= "-1") Integer publishStatus,//发布状态
     		           @RequestParam(value = "minCreateTime",required = false,defaultValue= "") String minCreateTime,//创建时间下限
@@ -70,7 +70,7 @@ public class Fm_uploadController extends BaseController {
     ) {
     	JsonResponse jsonResponse = new JsonResponse();
     	try {
-    		Page<Map<String,Object>> page = new Page<>(offset, limit);
+    		Page<Map<String,Object>> page = new PageFactory<Map<String,Object>>().defaultPage();
     		List<Map<String,Object>> data = wxFmListService.getFullList(page,FmName,publishStatus,minCreateTime,maxCreateTime,minPublishTime,maxPublishTime);
     		page.setRecords(data);
 			return this.packForBT(page);
@@ -112,8 +112,19 @@ public class Fm_uploadController extends BaseController {
      */
     @RequestMapping(value = "/delete")
     @ResponseBody
-    public Object delete() {
-        return SUCCESS_TIP;
+    public Object delete(@RequestParam("fmId") long fmId
+    		) {
+    	JsonResponse jsonResponse = new JsonResponse();
+    	try {
+    		wxFmListService.delete(fmId);
+			return jsonResponse.setSuccessful();
+		} catch(TipMessageException e){
+			logger.info(e.getMessage());
+			return jsonResponse.setError(e.getMessage());
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return jsonResponse.setError(AlertSystemErrorEnum.SYSTEM_ERROR_REPORT.getMessage());
+		}
     }
 
     /**
@@ -273,6 +284,7 @@ public class Fm_uploadController extends BaseController {
 	@ResponseBody
 	public JsonResponse uploadMusic() {
 		JsonResponse jsonResponse = new JsonResponse();
+		
 		return null;
 	}
 }

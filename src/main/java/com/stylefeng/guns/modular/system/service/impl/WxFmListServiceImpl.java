@@ -209,6 +209,16 @@ public class WxFmListServiceImpl implements IWxFmListService{
 		
 	}
 
+	@Override
+	public void delete(long fmId) {
+		//删除
+		WxFmList wxFmList = new WxFmList();
+		wxFmList.setId(fmId);
+		wxFmList.setStatus(StatusEnum.DEL_STATUS.getVal());
+		wxFmListMapper.updateById(wxFmList);
+		
+	}
+
 
 	
 	

@@ -12,12 +12,34 @@
                             <div class="col-sm-3">
                                 <#NameCon id="FmName" name="电台名称" />
                             </div>
+                            <div class="col-sm-2">
+                                <#SelectCon id="state" name="状态" >
+                                    <option value="-1">全部</option>
+                                    <option value="0">未发布</option>
+                                    <option value="5">已发布</option>
+                                    <option value="10">已下架</option>
+                                </#SelectCon>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+								<div class="col-md-6 no-padding-right"><#TimeCon id="beginTime" name="发布日期" isTime="false" pattern="YYYY-MM-DD"/></div>
+                                <div class="col-md-1 line-form-item">～</div>
+                                <div class="col-md-5 no-margin-left no-padding-left">
+                                    <#TimeInput id="endTime" isTime="false" pattern="YYYY-MM-DD"/>
+                                </div>
+							</div>
+							<div class="col-sm-4">
+								<div class="col-md-6 no-padding-right"><#TimeCon id="beginTime" name="创建日期" isTime="false" pattern="YYYY-MM-DD"/></div>
+                                <div class="col-md-1 line-form-item">～</div>
+                                <div class="col-md-5 no-margin-left no-padding-left">
+                                    <#TimeInput id="endTime" isTime="false" pattern="YYYY-MM-DD"/>
+                                </div>
+							</div>
                             <div class="col-sm-3">
                                 <#button name="搜索" icon="fa-search" clickFun="Fm_upload.search()"/>
                             </div>
-                            <div>
-                               
-                            </div>
+                        
                         </div>
                         <div class="hidden-xs" id="Fm_uploadTableToolbar" role="group">
                             @if(shiro.hasPermission("/fm_upload/add")){
