@@ -5,6 +5,8 @@ ALTER TABLE wx_fm_list ADD `create_time` BIGINT(20) DEFAULT NULL COMMENT '创建
 ALTER TABLE wx_fm_list ADD `update_time` BIGINT(20) DEFAULT NULL COMMENT '更新时间';
 ALTER TABLE wx_fm_list ADD `publish_time` BIGINT(20) DEFAULT NULL COMMENT '发布时间';
 
+
+ALTER TABLE wx_mp3url_list ADD `status` TINYINT(4) DEFAULT '0' COMMENT '状态：0:正常 1:删除';
 ALTER TABLE wx_mp3url_list ADD `create_time` BIGINT(20) DEFAULT NULL COMMENT '创建时间';
 ALTER TABLE wx_mp3url_list ADD `update_time` BIGINT(20) DEFAULT NULL COMMENT '更新时间';
 

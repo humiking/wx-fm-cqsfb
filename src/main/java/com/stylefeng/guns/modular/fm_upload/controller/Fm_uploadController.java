@@ -29,6 +29,7 @@ import com.stylefeng.guns.common.controller.BaseController;
 import com.stylefeng.guns.common.exception.TipMessageException;
 import com.stylefeng.guns.common.persistence.util.JsonResponse;
 import com.stylefeng.guns.common.persistence.util.OSSUploadUtil;
+import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.system.service.IWxFmListService;
 
 /**
@@ -135,19 +136,79 @@ public class Fm_uploadController extends BaseController {
 		}
     }
     
-	//添加电台音乐
+	/**
+	 * 添加电台音乐
+	 */
 	@RequestMapping("/add")
 	@ResponseBody
-	public JsonResponse add(){
-		
-		return null;
+	public JsonResponse add(
+			                @RequestParam("name") String name,
+			                @RequestParam(value = "poster",required = false,defaultValue = "") String poster,
+			                @RequestParam("artistorName") String artistorName,
+			                @RequestParam("totalDuration") long totalDuration,
+			                @RequestParam("weight") Integer weight,
+			                @RequestParam(value = "urlAndDuration",required = false,defaultValue = "") String urlAndDuration
+			                
+	){
+		JsonResponse jsonResponse = new JsonResponse();
+		try {
+			wxFmListService.add(name,poster,artistorName,totalDuration,weight,urlAndDuration);
+			return jsonResponse.setSuccessful();
+		} catch(TipMessageException e){
+			logger.info(e.getMessage());
+			return jsonResponse.setError(e.getMessage());
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return jsonResponse.setError(AlertSystemErrorEnum.SYSTEM_ERROR_REPORT.getMessage());
+		}
 	}
 
-	//编辑电台音乐
+	/**
+	 * 编辑电台音乐
+	 */
 	@RequestMapping("/update")
 	@ResponseBody
-	public JsonResponse update(){
-		return null;
+	public JsonResponse update(
+			@RequestParam("name") String name,
+            @RequestParam("poster") String poster,
+            @RequestParam("artistorName") String artistorName,
+            @RequestParam("totalDuration") long totalDuration,
+            @RequestParam("weight") Integer weight,
+            @RequestParam("urlAndDuration") String urlAndDuration,
+            @RequestParam("fmId") long fmId
+			){
+		JsonResponse jsonResponse = new JsonResponse();
+		try {
+			wxFmListService.update(name,poster,artistorName,totalDuration,weight,urlAndDuration,fmId);
+			return jsonResponse.setSuccessful();
+		} catch(TipMessageException e){
+			logger.info(e.getMessage());
+			return jsonResponse.setError(e.getMessage());
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return jsonResponse.setError(AlertSystemErrorEnum.SYSTEM_ERROR_REPORT.getMessage());
+		}
+	}
+	
+	/**
+	 * 发布或下架
+	 */
+	@RequestMapping("/updatePublishStatus")
+	@ResponseBody
+	public JsonResponse updatePublishStatus(@RequestParam("publishStatus") Integer publishStatus,
+			                                @RequestParam("fmId") long fmId ){
+		JsonResponse jsonResponse = new JsonResponse();
+		try {
+			wxFmListService.updatePublishStatus(publishStatus,fmId);
+			return jsonResponse.setSuccessful();
+		} catch(TipMessageException e){
+			logger.info(e.getMessage());
+			return jsonResponse.setError(e.getMessage());
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return jsonResponse.setError(AlertSystemErrorEnum.SYSTEM_ERROR_REPORT.getMessage());
+		}
+		
 	}
 	
 	//上传海报

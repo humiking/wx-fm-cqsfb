@@ -7,11 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
-
+@Component
 public class OSSUploadUtil implements FileUtil{
 	
 	private static Logger logger = Logger.getLogger(OSSUploadUtil.class);

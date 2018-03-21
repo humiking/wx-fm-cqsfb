@@ -16,4 +16,11 @@ public interface IWxFmListService {
 
 	Map<String, Object> detail(long fmId);
 
+	void updatePublishStatus(Integer publishStatus, long fmId);
+
+	void add(String name, String poster, String artistorName, long totalDuration, Integer weight, String urlAndDuration);
+
+	void update(String name, String poster, String artistorName, long totalDuration, Integer weight,
+			String urlAndDuration, Long fmId);
+
 }

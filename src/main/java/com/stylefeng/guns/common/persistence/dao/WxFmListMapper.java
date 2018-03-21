@@ -1,6 +1,9 @@
 package com.stylefeng.guns.common.persistence.dao;
 
 import com.stylefeng.guns.common.persistence.model.WxFmList;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
@@ -12,5 +15,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2018-02-24
  */
 public interface WxFmListMapper extends BaseMapper<WxFmList> {
+
+	long addWxFmList(@Param("wxFmList")WxFmList wxFmList);
 
 }

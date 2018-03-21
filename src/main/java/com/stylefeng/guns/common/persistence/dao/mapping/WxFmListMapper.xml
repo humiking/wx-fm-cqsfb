@@ -5,7 +5,6 @@
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.WxFmList">
 		<id column="id" property="id" />
-		<result column="mp3Url_id" property="mp3UrlId" />
 		<result column="NAME" property="name" />
 		<result column="poster" property="poster" />
 		<result column="artistor_name" property="artistorName" />
@@ -17,5 +16,30 @@
 		<result column="update_time" property="updateTime" />
 		<result column="publish_time" property="publishTime" />
 	</resultMap>
+	
+	<insert id="addWxFmList" parameterType="com.stylefeng.guns.common.persistence.model.WxFmList" useGeneratedKeys="true" keyProperty="wxFmList.id" keyColumn="GENERATED_KEY">
+	     INSERT INTO wx_fm_list 
+	     (NAME,
+	      poster,
+	      artistor_name,
+	      total_duration,
+	      status,
+	      weight,
+	      publish_status,
+	      create_time,
+	      update_time)
+	     VALUES
+	     (#{wxFmList.name},
+	      #{wxFmList.poster},
+	      #{wxFmList.artistorName},
+	      #{wxFmList.totalDuration},
+	      0,
+	      #{wxFmList.weight},
+	      0,
+	      #{wxFmList.createTime},
+	      #{wxFmList.updateTime})
+	
+	
+	</insert>
 
 </mapper>

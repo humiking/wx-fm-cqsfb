@@ -39,6 +39,10 @@ public class WxMp3urlList extends Model<WxMp3urlList> {
      * 当前音频的时长
      */
 	private Long duration;
+	/**
+	 * 状态：0:正常 1:删除
+	 */
+	private Integer status;
 
 
 	public Long getId() {
@@ -78,13 +82,17 @@ public class WxMp3urlList extends Model<WxMp3urlList> {
 		return this.id;
 	}
 
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
-		return "WxMp3urlList{" +
-			"id=" + id +
-			", fmId=" + fmId +
-			", map3Url=" + map3Url +
-			", duration=" + duration +
-			"}";
+		return "WxMp3urlList [id=" + id + ", fmId=" + fmId + ", map3Url=" + map3Url + ", duration=" + duration
+				+ ", status=" + status + "]";
 	}
 }
