@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.system.service;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public interface IWxFmListService {
 	
 	List<Map<String,Object>> getFmListByUserId( Page<WxFmList> page);
 
-	List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName, Integer publishStatus, String minCreateTime, String maxCreateTime, String minPublishTime, String maxPublishTime);
+	List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName, Integer publishStatus, String minCreateTime, String maxCreateTime, String minPublishTime, String maxPublishTime, int sortType) throws ParseException;
 
 	Map<String, Object> detail(long fmId);
 
@@ -24,5 +25,7 @@ public interface IWxFmListService {
 			String urlAndDuration, Long fmId);
 
 	void delete(long fmId);
+
+	void setWeight(int weight, long fmId);
 
 }

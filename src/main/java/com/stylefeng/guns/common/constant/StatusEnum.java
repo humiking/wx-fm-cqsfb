@@ -28,11 +28,11 @@ public enum StatusEnum {
         this.message = message;
     }
 
-    public Integer getVal() {
+    public int getVal() {
         return val;
     }
 
-    public void setVal(Integer val) {
+    public void setVal(int val) {
         this.val = val;
     }
 
@@ -41,7 +41,7 @@ public enum StatusEnum {
             return null;
         } else {
             for (StatusEnum statusEnum : StatusEnum.values()) {
-                if (statusEnum.getVal().equals(value)) {
+                if (statusEnum.getVal()==(value)) {
                     return statusEnum.getMessage();
                 }
             }

@@ -62,16 +62,17 @@ public class Fm_uploadController extends BaseController {
     @ResponseBody
     public Object list(
     		           @RequestParam(value = "FmName",required = false ,defaultValue= "") String FmName,//
-    		           @RequestParam(value = "publishStatus",required = false,defaultValue= "-1") Integer publishStatus,//发布状态
+    		           @RequestParam(value = "publishStatus",required = false,defaultValue= "-1") Integer publishStatus,//发布状态：0：未发布 5：已发布 10：已下架
     		           @RequestParam(value = "minCreateTime",required = false,defaultValue= "") String minCreateTime,//创建时间下限
     		           @RequestParam(value = "maxCreateTime",required = false,defaultValue= "") String maxCreateTime,//创建时间上限
     		           @RequestParam(value = "minPublishTime",required = false,defaultValue= "") String minPublishTime,//发布时间下限
-    		           @RequestParam(value = "maxPublishTime",required = false,defaultValue= "") String maxPublishTime//发布时间上限
+    		           @RequestParam(value = "maxPublishTime",required = false,defaultValue= "") String maxPublishTime,//发布时间上限
+    		           @RequestParam(value = "sortType",required = false,defaultValue= "1") int sortType//排序方式 1:权重倒序  2:创建时间倒序 3:创建时间升序  4:发布时间倒序 5:发布时间升序
     ) {
     	JsonResponse jsonResponse = new JsonResponse();
     	try {
     		Page<Map<String,Object>> page = new PageFactory<Map<String,Object>>().defaultPage();
-    		List<Map<String,Object>> data = wxFmListService.getFullList(page,FmName,publishStatus,minCreateTime,maxCreateTime,minPublishTime,maxPublishTime);
+    		List<Map<String,Object>> data = wxFmListService.getFullList(page,FmName,publishStatus,minCreateTime,maxCreateTime,minPublishTime,maxPublishTime,sortType);
     		page.setRecords(data);
 			return this.packForBT(page);
 		} catch(TipMessageException e){
@@ -279,12 +280,34 @@ public class Fm_uploadController extends BaseController {
 		}
 	}
 	
-	//上传音乐
+	/**
+	 * 上传音乐
+	 */
 	@RequestMapping("uploadMusic")
 	@ResponseBody
 	public JsonResponse uploadMusic() {
 		JsonResponse jsonResponse = new JsonResponse();
 		
 		return null;
+	}
+	
+	/**
+	 * 设置权重
+	 */
+	@RequestMapping("/setWeight")
+	@ResponseBody
+	public JsonResponse setWeight(@RequestParam(value="fmId") long fmId,
+			                      @RequestParam(value="weight") int weight) {
+		JsonResponse jsonResponse = new JsonResponse();
+		try {
+			wxFmListService.setWeight(weight,fmId);
+			return jsonResponse.setSuccessful();
+		} catch(TipMessageException e){
+			logger.info(e.getMessage());
+			return jsonResponse.setError(e.getMessage());
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return jsonResponse.setError(AlertSystemErrorEnum.SYSTEM_ERROR_REPORT.getMessage());
+		}
 	}
 }

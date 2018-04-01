@@ -204,7 +204,21 @@ public class DateUtil {
 	public static boolean isValidDate(String s) {
 		return parse(s, "yyyy-MM-dd HH:mm:ss") != null;
 	}
-
+    
+	/**
+	 * strToLong  yyyy-MM-dd
+	 * @throws ParseException 
+	 */
+	public static Long strDateToLong(String dateStr) throws ParseException {
+		if(StringUtils.isEmpty(dateStr)){
+			return null;
+		}
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = simpleDateFormat.parse(dateStr);
+		Long LongDate = date.getTime();
+		return LongDate;
+	}
+	
 	/**
 	 * 校验日期是否合法
 	 *

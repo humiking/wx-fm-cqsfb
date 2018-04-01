@@ -72,6 +72,11 @@ public class WxFmList extends Model<WxFmList> {
 	 */
 	@TableField("publish_time")
 	private Long publishTime;
+	/**
+	 * 下架时间
+	 */
+	@TableField("undercarrige_time")
+	private Long undercarrigeTime;
 
 	public Long getId() {
 		return id;
@@ -167,11 +172,19 @@ public class WxFmList extends Model<WxFmList> {
 		this.publishTime = publishTime;
 	}
 
+	public Long getUndercarrigeTime() {
+		return undercarrigeTime;
+	}
+
+	public void setUndercarrigeTime(Long undercarrigeTime) {
+		this.undercarrigeTime = undercarrigeTime;
+	}
+
 	@Override
 	public String toString() {
-		return "WxFmList [id=" + id + ", name=" + name + ", poster=" + poster
-				+ ", artistorName=" + artistorName + ", totalDuration=" + totalDuration + ", status=" + status
-				+ ", publishStatus=" + publishStatus + ", weight=" + weight + ", createTime=" + createTime
-				+ ", updateTime=" + updateTime + ", publishTime=" + publishTime + "]";
+		return "WxFmList [id=" + id + ", name=" + name + ", poster=" + poster + ", artistorName=" + artistorName
+				+ ", totalDuration=" + totalDuration + ", status=" + status + ", publishStatus=" + publishStatus
+				+ ", weight=" + weight + ", createTime=" + createTime + ", updateTime=" + updateTime + ", publishTime="
+				+ publishTime + ", undercarrigeTime=" + undercarrigeTime + "]";
 	}
 }

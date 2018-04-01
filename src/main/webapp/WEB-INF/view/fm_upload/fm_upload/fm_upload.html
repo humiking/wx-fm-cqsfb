@@ -14,37 +14,48 @@
                             </div>
                             <div class="col-sm-2">
                                 <#SelectCon id="state" name="状态" >
-                                    <option value="-1">全部</option>
+                                    <option value="-1" selected="true">全部</option>
                                     <option value="0">未发布</option>
                                     <option value="5">已发布</option>
                                     <option value="10">已下架</option>
                                 </#SelectCon>
                             </div>
+                            <div class="col-sm-2">
+                                <#SelectCon id="sort" name="排序方式" >
+                                    <option value="0" selected="true">默认排序</option>
+                                    <option value="1">权重倒序</option>
+                                    <option value="2">创建时间倒序</option>
+                                    <option value="3">创建时间升序</option>
+                                    <option value="4">发布时间倒序</option>
+                                    <option value="5">发布时间升序</option>
+                                </#SelectCon>
+                            </div>
                         </div>
                         <div form-group class="row">
                             <div class="col-sm-4">
-								<div class="col-md-6 no-padding-right"><#TimeCon id="beginTime" name="发布日期" isTime="false" pattern="YYYY-MM-DD"/></div>
+								<div class="col-md-6 no-padding-right"><#TimeCon id="publishBeginTime" name="发布日期" isTime="false" pattern="YYYY-MM-DD"/></div>
                                 <div class="col-md-1 line-form-item">～</div>
                                 <div class="col-md-5 no-margin-left no-padding-left">
-                                    <#TimeInput id="endTime" isTime="false" pattern="YYYY-MM-DD"/>
+                                    <#TimeInput id="publishEndTime" isTime="false" pattern="YYYY-MM-DD"/>
                                 </div>
 							</div>
 							<div class="col-sm-4">
-								<div class="col-md-6 no-padding-right"><#TimeCon id="beginTime" name="创建日期" isTime="false" pattern="YYYY-MM-DD"/></div>
+								<div class="col-md-6 no-padding-right"><#TimeCon id="createBeginTime" name="创建日期" isTime="false" pattern="YYYY-MM-DD"/></div>
                                 <div class="col-md-1 line-form-item">～</div>
                                 <div class="col-md-5 no-margin-left no-padding-left">
-                                    <#TimeInput id="endTime" isTime="false" pattern="YYYY-MM-DD"/>
+                                    <#TimeInput id="createEndTime" isTime="false" pattern="YYYY-MM-DD"/>
                                 </div>
 							</div>
                             <div class="col-sm-3">
                                 <#button name="搜索" icon="fa-search" clickFun="Fm_upload.search()"/>
                             </div>
-                        
+                            <div class="col-sm-3">
+                                 @if(shiro.hasPermission("/fm_upload/add")){
+                                <#button name="添加" icon="fa-plus" clickFun="Fm_upload.openAddFm_upload()"/>
+                                 @}
+                            </div>
                         </div>
                         <div class="hidden-xs" id="Fm_uploadTableToolbar" role="group">
-                            @if(shiro.hasPermission("/fm_upload/add")){
-                                <#button name="添加" icon="fa-plus" clickFun="Fm_upload.openAddFm_upload()"/>
-                            @}
                             @if(shiro.hasPermission("/fm_upload/update")){
                                 <#button name="修改" icon="fa-plus" clickFun="Fm_upload.openFm_uploadDetail()" space="true"/>
                             @}

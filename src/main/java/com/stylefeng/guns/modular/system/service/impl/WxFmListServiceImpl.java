@@ -1,10 +1,13 @@
 package com.stylefeng.guns.modular.system.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.naming.java.javaURLContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.PublishStatusEnum;
+import com.stylefeng.guns.common.constant.SortTypeEnum;
 import com.stylefeng.guns.common.constant.StatusEnum;
 import com.stylefeng.guns.common.exception.TipMessageException;
 import com.stylefeng.guns.common.persistence.dao.WxFmListMapper;
@@ -24,6 +28,7 @@ import com.stylefeng.guns.common.persistence.dao.WxMp3urlListMapper;
 import com.stylefeng.guns.common.persistence.model.WxFmList;
 import com.stylefeng.guns.common.persistence.model.WxMp3urlList;
 import com.stylefeng.guns.common.persistence.util.FormateUtils;
+import com.stylefeng.guns.core.util.DateUtil;
 import com.stylefeng.guns.modular.system.service.IWxFmListService;
 import com.stylefeng.guns.modular.system.service.IWxMp3urlListService;
 
@@ -79,9 +84,10 @@ public class WxFmListServiceImpl implements IWxFmListService{
 	}
 
 	@Override
-	public List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName, Integer publishStatus, String minCreateTime, String maxCreateTime, String minPublishTime, String maxPublishTime) {
+	public List<Map<String, Object>> getFullList(Page<Map<String, Object>> page, String fmName, Integer publishStatus, String minCreateTime, String maxCreateTime, String minPublishTime, String maxPublishTime, int sortType) throws ParseException {
 		//获取所有的播放音乐列表
 		Wrapper<WxFmList> wrapper = new EntityWrapper<WxFmList>();
+		wrapper.eq("status", StatusEnum.NORMAL_STATUS.getVal());
 		if(!fmName.equals("")) {
 			wrapper.like("NAME", fmName);
 		}
@@ -90,21 +96,58 @@ public class WxFmListServiceImpl implements IWxFmListService{
 		}
 		
 		if(!StringUtils.isNullOrEmpty(minCreateTime)){
-			wrapper.ge("create_time", minCreateTime);
+			long minCreateTimeLong =  DateUtil.strDateToLong(minCreateTime);
+			wrapper.ge("create_time", minCreateTimeLong);
 		}
 		if(!StringUtils.isNullOrEmpty(maxCreateTime)){
-			wrapper.le("create_time", maxCreateTime);
+			long maxCreateTimeLong =  DateUtil.strDateToLong(maxCreateTime);
+			wrapper.le("create_time", maxCreateTimeLong);
 		}
 		
 		if(!StringUtils.isNullOrEmpty(minPublishTime)){
-			wrapper.ge("publish_time", minPublishTime);
+			long minPublishTimeLong =  DateUtil.strDateToLong(minPublishTime);
+			wrapper.ge("publish_time", minPublishTimeLong);
 		}
 		if(!StringUtils.isNullOrEmpty(maxPublishTime)){
-			wrapper.le("publish_time", maxPublishTime);
+			long maxPublishTimeLong =  DateUtil.strDateToLong(maxPublishTime);
+			wrapper.le("publish_time", maxPublishTimeLong);
 		}
-		
-		wrapper.orderBy("weight", false).orderBy("id",false);
+		//排序
+		switch (sortType) {
+		case 1:
+			wrapper.orderBy("weight", false).orderBy("id",false);//权重倒序，id倒序
+			break;
+		case 2:
+			wrapper.orderBy("create_time",false).orderBy("id",false);//创建时间倒序
+			break;
+		case 3:
+			wrapper.orderBy("create_time",true).orderBy("id",false);//创建时间升序
+			break;
+		case 4:
+			wrapper.orderBy("publish_time",false).orderBy("id",false);//发布时间倒序
+			break;
+		case 5:
+			wrapper.orderBy("publish_time",true).orderBy("id",false);//发布时间升序
+			break;
+		default:
+			wrapper.orderBy("weight", false).orderBy("id",false);//权重倒序，id倒序
+			break;
+		}
 		List<Map<String,Object>> list = wxFmListMapper.selectMapsPage(page, wrapper);
+		for(Map<String, Object> map :list) {
+			Long createTime = (Long)map.get("createTime");
+			Long publishTime = (Long)map.get("publishTime");
+			String createTimeStr ="";
+			String publishTimeStr = "";
+			if(null != createTime ) {
+				createTimeStr = DateUtil.getTime(new Date(createTime));
+			}
+			if(null != publishTime) {
+				publishTimeStr = DateUtil.getTime(new Date(publishTime));
+			}
+			map.put("createTime", createTimeStr);
+			map.put("publishTime", publishTimeStr);
+		}
 		return list;
 	}
 
@@ -143,6 +186,12 @@ public class WxFmListServiceImpl implements IWxFmListService{
 		}
 		//更新发布状态
 		WxFmList wxFmList2 = new WxFmList();
+		long currentTime = System.currentTimeMillis();
+		if(PublishStatusEnum.UNDERCARRIGE_STATUS.getVal() == publishStatus) {
+			wxFmList2.setUndercarrigeTime(currentTime);
+		}else if(PublishStatusEnum.PUBLISHING_STATUS.getVal() == publishStatus){
+			wxFmList2.setPublishTime(currentTime);
+		}
 		wxFmList2.setId(fmId);
 		wxFmList2.setPublishStatus(publishStatus);
 		wxFmListMapper.updateById(wxFmList2);
@@ -215,6 +264,21 @@ public class WxFmListServiceImpl implements IWxFmListService{
 		WxFmList wxFmList = new WxFmList();
 		wxFmList.setId(fmId);
 		wxFmList.setStatus(StatusEnum.DEL_STATUS.getVal());
+		wxFmListMapper.updateById(wxFmList);
+		
+	}
+    /**
+     * 设置权重
+     */
+	@Override
+	public void setWeight(int weight, long fmId) {
+		WxFmList wxFmList = wxFmListMapper.selectById(fmId);
+		if(null == wxFmList) {
+			logger.info("该电台不存在！fmId："+fmId);
+			throw new TipMessageException("该电台不存在！");
+		}
+		wxFmList.setId(fmId);
+		wxFmList.setWeight(weight);
 		wxFmListMapper.updateById(wxFmList);
 		
 	}

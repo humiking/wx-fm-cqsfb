@@ -1,3 +1,6 @@
+#==========1.1wx-fm-cqsfb 20180401===============================
+ALTER TABLE wx_fm_list ADD `undercarrige_time` BIGINT(20) DEFAULT NULL COMMENT '下架时间';
+
 #==========1.1wx-fm-cqsfb 20180305===============================
 ALTER TABLE wx_fm_list ADD `publish_status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '发布状态：0：未发布  5：已发布   10：已下架';
 ALTER TABLE wx_fm_list ADD `weight` INT(11) DEFAULT '0' COMMENT '权重:值越大越靠前 请输入9999以内的数字';
