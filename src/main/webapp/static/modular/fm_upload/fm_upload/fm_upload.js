@@ -310,21 +310,7 @@ Fm_upload.openFm_uploadDetail = function() {
     }
 };
 
-/**
- * 删除电台上传
- */
-Fm_upload.delete = function() {
-    if (this.check()) {
-        var ajax = new $ax(Feng.ctxPath + "/fm_upload/delete", function(data) {
-            Feng.success("删除成功!");
-            Fm_upload.table.refresh();
-        }, function(data) {
-            Feng.error("删除失败!" + data.responseJSON.message + "!");
-        });
-        ajax.set("fm_uploadId", this.seItem.id);
-        ajax.start();
-    }
-};
+
 
 
 
