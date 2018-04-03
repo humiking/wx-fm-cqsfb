@@ -99,6 +99,15 @@ public class Fm_uploadController extends BaseController {
     public String fm_uploadAdd() {
         return PREFIX + "fm_upload_add.html";
     }
+    
+    /**
+     * 跳转到设置权重
+     */
+    @RequestMapping("/fm_upload_ranksetting")
+    public String fm_uploadRanksetting() {
+        return PREFIX + "fm_upload_ranksetting.html";
+    }
+
 
     /**
      * 跳转到修改电台上传

@@ -5,7 +5,8 @@ var Fm_upload = {
     id: "Fm_uploadTable", //表格id
     seItem: null, //选中的条目
     table: null,
-    layerIndex: -1
+    layerIndex: -1,
+    selectedId:null
 };
 
 /**
@@ -64,40 +65,22 @@ Fm_upload.operateEvents = {
 }
 
 /**
- * 设置排名
+ * 弹出设置排名框
  */
-// Fm_upload.rankBtnSetting = function(fmId){
-//     var promptText = '';
-//     promptText = '该已经在小程序上发布的电台歌曲：'+name+',确认要下架吗?';
-//     Feng.confirm(promptText, function() {
-//         $.ajax({
-//             url:"/fm_upload/updatePublishStatus",
-//             type:"GET",
-//             dataType:"json",
-//             data:{
-//                 publishStatus:10,
-//                 fmId:fmId
-//             },
-//             success:function(res){
-//                 if(res.successful){
-//                     Feng.success('下架成功');
-//                     Fm_upload.search();
-//                 }else {
-//                     Feng.error(res.error);
-//                 }
-
-//             },
-//             error:function(msg){
-//                 Feng.error(msg.error)
-
-//             }
-//         })
-
-//     });
+ Fm_upload.rankBtnSetting = function(fmId){
+	var index = layer.open({
+        type: 2,
+        title: '设置权重',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/fm_upload/fm_upload_ranksetting'
+    });
+    this.layerIndex = index;
+    this.selectedId = fmId;
 
 
-// }
-
+ }
 
 /**
  * 下架电台
