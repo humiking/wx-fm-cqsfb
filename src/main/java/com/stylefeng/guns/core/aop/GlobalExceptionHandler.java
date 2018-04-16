@@ -1,9 +1,12 @@
 package com.stylefeng.guns.core.aop;
 
+import com.stylefeng.guns.common.constant.ResultCodeEnum;
 import com.stylefeng.guns.common.constant.tips.ErrorTip;
 import com.stylefeng.guns.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.common.exception.BussinessException;
 import com.stylefeng.guns.common.exception.InvalidKaptchaException;
+import com.stylefeng.guns.common.exception.TipMessageException;
+import com.stylefeng.guns.common.persistence.util.JsonResponse;
 import com.stylefeng.guns.core.log.LogManager;
 import com.stylefeng.guns.core.log.factory.LogTaskFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
@@ -52,6 +55,21 @@ public class GlobalExceptionHandler {
         getRequest().setAttribute("tip", e.getMessage());
         log.error("业务异常:", e);
         return new ErrorTip(e.getCode(), e.getMessage());
+    }
+    
+    /**
+     * 拦截业务异常2
+     *
+     * @author nijin
+     */
+    @ExceptionHandler(TipMessageException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public Object notFount(TipMessageException e) {
+    	LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
+    	getRequest().setAttribute("tip", e.getMessage());
+    	log.error("业务异常:", e);
+    	return new JsonResponse().setError(e.getMessage());
     }
 
     /**
@@ -122,23 +140,42 @@ public class GlobalExceptionHandler {
         return new ErrorTip(BizExceptionEnum.NO_PERMITION);
     }
 
+//    /**
+//     * 拦截未知的运行时异常
+//     *
+//     * @author fengshuonan
+//     */
+//    @ExceptionHandler(RuntimeException.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    @ResponseBody
+//    public ErrorTip notFount(RuntimeException e) {
+////        LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
+//    	if(ShiroKit.getUser().getId() == null) {
+//    		
+//    		return new ErrorTip(BizExceptionEnum.SERVER_ERROR);
+//    	}
+//        getRequest().setAttribute("tip", "服务器未知运行时异常");
+//        log.error("运行时异常:", e);
+//        return new ErrorTip(BizExceptionEnum.SERVER_ERROR);
+//    }
+    
     /**
      * 拦截未知的运行时异常
      *
-     * @author fengshuonan
+     * @author nijin
      */
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ErrorTip notFount(RuntimeException e) {
+    public Object notFount(Exception e) {
 //        LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
     	if(ShiroKit.getUser().getId() == null) {
     		
     		return new ErrorTip(BizExceptionEnum.SERVER_ERROR);
     	}
-        getRequest().setAttribute("tip", "服务器未知运行时异常");
-        log.error("运行时异常:", e);
-        return new ErrorTip(BizExceptionEnum.SERVER_ERROR);
+    	getRequest().setAttribute("tip", ResultCodeEnum.SYSTEM_OPERATION_ERROR.getMessage());
+    	log.error("运行时异常:", e);
+    	return new JsonResponse().setError(e.getMessage());
     }
 
     /**
